@@ -74,6 +74,8 @@ All testdata slettes og legges inn på nytt hver gang backend starter.
 
 ## 4. Start appen
 
+Gå tilbake til din klone av `forer-legeerklaering` i et nytt terminalvindu. Kommandoene under kjøres derfra, ikke fra nav-epj.
+
 ```bash
 cd src/App
 dotnet user-secrets set "SmartOnFhir:ClientSecret" "local-dev-secret"   # én gang
@@ -128,6 +130,8 @@ Invoke-RestMethod -Method Post "$B/api/patients/$P/consultations" | Out-Null
 | Symptom | Årsak |
 |---|---|
 | nav-epj starter ikke og klager på «insecure redirectUri» | Endring 2 i steg 2 mangler. |
+| nav-epj sin frontend viser «Du er logget inn med HelseID, men nav-epj svarte ikke» | Frontenden når ikke backend. Åpne `http://localhost:8080/api/practitioners/me`. Den skal vise legen GRØNN VITS. Får du ikke svar, er backend ikke startet: se etter feil i terminalen der `gradlew runLocal` kjører. Får du en annen side, bruker noe annet port 8080, typisk HAPI FHIR-containeren fra repoets gamle oppsett. Stopp den og start backend på nytt. |
+| Backend svarer på `localhost:8080`, men frontenden viser fortsatt feilen | Se i terminalen der `yarn dev` kjører. Står det `ECONNREFUSED ::1:8080`, slår `localhost` opp til IPv6. Endre alle tre `target`-verdiene i `frontend/vite.config.js` i nav-epj fra `http://localhost:8080` til `http://127.0.0.1:8080`, og start `yarn dev` på nytt. |
 | `yarn` feiler med «Invalid authentication» | `NPM_AUTH_TOKEN` mangler eller har ikke `read:packages`. |
 | Appen står ikke i applistene i nav-epj | Klientregistreringen er ikke lagt inn, eller backend er ikke startet på nytt etterpå. |
 | Lege og legekontor er tomme, men pasienten er fylt ut | Appen fikk ikke validert id_token. Se etter «id_token» i appens logg med `studioctl app logs`. |
