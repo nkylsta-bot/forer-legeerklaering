@@ -125,7 +125,7 @@ Pasient (Helsenorge.no)      EPJ (fastlege)         Altinn Studio-app (BFF)     
 
 ## nav-epj og veien mot TT02 (2026-11-08)
 
-Appen er koblet til NAVs test-EPJ [`navikt/nav-epj`](https://github.com/navikt/nav-epj), som bruker norske identifikatorer og testdata. Oppsett og testscenarioer står i [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md). Analysen fra august, [NAV-EPJ-TESTMILJO.md](NAV-EPJ-TESTMILJO.md), er utdatert.
+Appen er koblet til NAVs test-EPJ [`navikt/nav-epj`](https://github.com/navikt/nav-epj), som bruker norske identifikatorer og testdata. Oppsett og testscenarioer står i [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md). Analysen fra august, [NAV-EPJ-TESTMILJO.md](NAV-EPJ-TESTMILJO.md), er utdatert. [smart-launch-nav-epj.svg](smart-launch-nav-epj.svg) viser flyten steg for steg.
 
 ### Hva som er endret i nav-epj siden august
 
@@ -5066,6 +5066,10 @@ Guiden erstatter [NAV-EPJ-TESTMILJO.md](NAV-EPJ-TESTMILJO.md), som beskriver nav
 | nav-epj frontend, selve EPJ-et | `http://localhost:5173` |
 
 Legen åpner appen fra nav-epj. nav-epj sender nettleseren til appens `/smart/launch`. Appen henter token og FHIR-data på serversiden og åpner skjemaet ferdig utfylt.
+
+[![Sekvensdiagram for SMART EHR Launch fra nav-epj](smart-launch-nav-epj.svg)](smart-launch-nav-epj.svg)
+
+Diagrammet viser hele flyten, og hvordan appen får vite hvilken pasient og konsultasjon den ble startet fra.
 
 ## Forutsetninger
 

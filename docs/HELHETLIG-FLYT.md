@@ -91,7 +91,7 @@ Pasient (Helsenorge.no)      EPJ (fastlege)         Altinn Studio-app (BFF)     
 
 ## nav-epj og veien mot TT02 (2026-11-08)
 
-Appen er koblet til NAVs test-EPJ [`navikt/nav-epj`](https://github.com/navikt/nav-epj), som bruker norske identifikatorer og testdata. Oppsett og testscenarioer står i [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md). Analysen fra august, [NAV-EPJ-TESTMILJO.md](NAV-EPJ-TESTMILJO.md), er utdatert.
+Appen er koblet til NAVs test-EPJ [`navikt/nav-epj`](https://github.com/navikt/nav-epj), som bruker norske identifikatorer og testdata. Oppsett og testscenarioer står i [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md). Analysen fra august, [NAV-EPJ-TESTMILJO.md](NAV-EPJ-TESTMILJO.md), er utdatert. [smart-launch-nav-epj.svg](smart-launch-nav-epj.svg) viser flyten steg for steg.
 
 ### Hva som er endret i nav-epj siden august
 

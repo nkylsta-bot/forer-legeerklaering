@@ -14,6 +14,10 @@ Guiden erstatter [NAV-EPJ-TESTMILJO.md](NAV-EPJ-TESTMILJO.md), som beskriver nav
 
 Legen åpner appen fra nav-epj. nav-epj sender nettleseren til appens `/smart/launch`. Appen henter token og FHIR-data på serversiden og åpner skjemaet ferdig utfylt.
 
+[![Sekvensdiagram for SMART EHR Launch fra nav-epj](smart-launch-nav-epj.svg)](smart-launch-nav-epj.svg)
+
+Diagrammet viser hele flyten, og hvordan appen får vite hvilken pasient og konsultasjon den ble startet fra.
+
 ## Forutsetninger
 
 - .NET 8 SDK

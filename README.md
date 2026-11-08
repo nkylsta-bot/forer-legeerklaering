@@ -48,6 +48,7 @@ EPJ-system ──SMART EHR Launch──► Altinn App (BFF)
 
 - [Arkitekturoversikt](docs/arkitektur-oversikt.svg)
 - [SMART Launch-sekvens](docs/smart-launch-sekvens.svg)
+- [SMART Launch fra nav-epj](docs/smart-launch-nav-epj.svg)
 - [Nettverksruting (lokalt utviklingsmiljø)](docs/nettverksruting.svg)
 
 ---
@@ -193,6 +194,7 @@ forer-legeerklaering/
 │   ├── VEIKART.md                    # Prioritert veikart fase 1–5
 │   ├── arkitektur-oversikt.svg
 │   ├── smart-launch-sekvens.svg
+│   ├── smart-launch-nav-epj.svg
 │   └── nettverksruting.svg
 └── local-dev/                        # Lokal testinfrastruktur
     ├── seed.ps1                      # Seeder FHIR med 5 pasienter + lege + org

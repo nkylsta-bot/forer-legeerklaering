@@ -1,0 +1,108 @@
+<svg viewBox="0 0 1060 1217" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif" font-size="11">
+  <title>SMART EHR Launch fra nav-epj — sekvensdiagram</title>
+  <desc>Hvordan NAVs test-EPJ nav-epj starter Altinn-appen med SMART EHR Launch, og hvordan appen får vite hvilken pasient og konsultasjon den ble startet fra.</desc>
+  <rect width="1060" height="1217" fill="#fafafa"/>
+  <text x="530.0" y="24" text-anchor="middle" font-size="14" font-weight="bold" fill="#212121">SMART EHR Launch fra nav-epj</text>
+  <text x="530.0" y="40" text-anchor="middle" font-size="10" fill="#757575">SMART App Launch IG v2.2.0 · PKCE S256 · client_secret_basic · BFF-mønster · verifisert lokalt 2026-11-08</text>
+  <defs>
+    <style>.lbl { paint-order: stroke; stroke: #fafafa; stroke-width: 4px; stroke-linejoin: round; }</style>
+    <marker id="m-br" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#f57c00"/></marker>
+    <marker id="m-epj" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#1565c0"/></marker>
+    <marker id="m-app" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#388e3c"/></marker>
+    <marker id="m-auth" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#7b1fa2"/></marker>
+    <marker id="m-fhir" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#e65100"/></marker>
+  </defs>
+  <rect x="5.0" y="54" width="170" height="40" rx="5" fill="#f57c00"/>
+  <text x="90" y="70" text-anchor="middle" fill="white" font-weight="bold">Nettleser</text>
+  <text x="90" y="86" text-anchor="middle" fill="#fff8e1" font-size="9">Legens nettleser</text>
+  <line x1="90" y1="94" x2="90" y2="1177" stroke="#f57c00" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="205.0" y="54" width="170" height="40" rx="5" fill="#1565c0"/>
+  <text x="290" y="70" text-anchor="middle" fill="white" font-weight="bold">nav-epj · EPJ</text>
+  <text x="290" y="86" text-anchor="middle" fill="#bbdefb" font-size="9">Pasientliste, konsultasjon</text>
+  <line x1="290" y1="94" x2="290" y2="1177" stroke="#1565c0" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="435.0" y="54" width="170" height="40" rx="5" fill="#388e3c"/>
+  <text x="520" y="70" text-anchor="middle" fill="white" font-weight="bold">Altinn-app (BFF)</text>
+  <text x="520" y="86" text-anchor="middle" fill="#c8e6c9" font-size="9">SmartLaunchControllerBase</text>
+  <line x1="520" y1="94" x2="520" y2="1177" stroke="#388e3c" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="665.0" y="54" width="170" height="40" rx="5" fill="#7b1fa2"/>
+  <text x="750" y="70" text-anchor="middle" fill="white" font-weight="bold">nav-epj · /oidc</text>
+  <text x="750" y="86" text-anchor="middle" fill="#e1bee7" font-size="9">SMART-autorisasjonsserver</text>
+  <line x1="750" y1="94" x2="750" y2="1177" stroke="#7b1fa2" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="865.0" y="54" width="170" height="40" rx="5" fill="#e65100"/>
+  <text x="950" y="70" text-anchor="middle" fill="white" font-weight="bold">nav-epj · /fhir</text>
+  <text x="950" y="86" text-anchor="middle" fill="#ffe0b2" font-size="9">FHIR R4-API</text>
+  <line x1="950" y1="94" x2="950" y2="1177" stroke="#e65100" stroke-width="1" stroke-dasharray="4,3"/>
+  <rect x="12" y="106" width="1036" height="20" rx="3" fill="#eceff1"/>
+  <text x="22" y="120" font-weight="bold" fill="#37474f">1 · Legen starter appen i EPJ-et</text>
+  <line x1="90" y1="144" x2="284" y2="144" stroke="#f57c00" stroke-width="1.4" marker-end="url(#m-br)"/>
+  <text x="190.0" y="139" text-anchor="middle" fill="#212121" class="lbl">Velger pasient og konsultasjon, åpner «Legeerklæring førerrett»</text>
+  <rect x="298" y="162" width="430.4" height="50" rx="4" fill="white" stroke="#1565c0" stroke-width="1"/>
+  <text x="306" y="176" fill="#212121" font-size="10">Finner aktiv pasient og pågående konsultasjon for legen ved legekontoret.</text>
+  <text x="306" y="190" fill="#212121" font-size="10">Lagrer launch-kontekst { pasient, konsultasjon, HPR, orgnr }</text>
+  <text x="306" y="204" fill="#212121" font-size="10">under en tilfeldig launch-ID som kan brukes én gang og varer i 5 minutter.</text>
+  <line x1="290" y1="236" x2="96" y2="236" stroke="#1565c0" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#m-epj)"/>
+  <text x="190.0" y="231" text-anchor="middle" fill="#212121" class="lbl">302 → /smart/launch?iss=…/fhir&amp;launch=&lt;launch-ID&gt;</text>
+  <line x1="90" y1="266" x2="514" y2="266" stroke="#f57c00" stroke-width="1.4" marker-end="url(#m-br)"/>
+  <text x="305.0" y="261" text-anchor="middle" fill="#212121" class="lbl">GET /smart/launch?iss=…&amp;launch=…</text>
+  <rect x="12" y="290" width="1036" height="20" rx="3" fill="#eceff1"/>
+  <text x="22" y="304" font-weight="bold" fill="#37474f">2 · Autorisasjon</text>
+  <line x1="520" y1="328" x2="944" y2="328" stroke="#388e3c" stroke-width="1.4" marker-end="url(#m-app)"/>
+  <text x="735.0" y="323" text-anchor="middle" fill="#212121" class="lbl">GET /fhir/.well-known/smart-configuration</text>
+  <text x="735.0" y="341" text-anchor="middle" fill="#616161" font-size="9.5" class="lbl">authorize, token og jwks_uri</text>
+  <rect x="232.8" y="355" width="279.2" height="36" rx="4" fill="white" stroke="#388e3c" stroke-width="1"/>
+  <text x="240.8" y="369" fill="#212121" font-size="10">Sjekker iss mot allowlist.</text>
+  <text x="240.8" y="383" fill="#212121" font-size="10">Lagrer state og PKCE-verifier i serversesjonen.</text>
+  <line x1="520" y1="415" x2="96" y2="415" stroke="#388e3c" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#m-app)"/>
+  <text x="305.0" y="410" text-anchor="middle" fill="#212121" class="lbl">302 → /oidc/authorize</text>
+  <text x="305.0" y="428" text-anchor="middle" fill="#616161" font-size="9.5" class="lbl">client_id, redirect_uri, scope, state, code_challenge, launch, aud</text>
+  <line x1="90" y1="454" x2="744" y2="454" stroke="#f57c00" stroke-width="1.4" marker-end="url(#m-br)"/>
+  <text x="420.0" y="449" text-anchor="middle" fill="#212121" class="lbl">GET /oidc/authorize</text>
+  <rect x="446.0" y="472" width="296.0" height="78" rx="4" fill="white" stroke="#7b1fa2" stroke-width="1"/>
+  <text x="454.0" y="486" fill="#212121" font-size="10">redirect_uri må være registrert.</text>
+  <text x="454.0" y="500" fill="#212121" font-size="10">Launch-ID må tilhøre innlogget lege og legekontor.</text>
+  <text x="454.0" y="514" fill="#212121" font-size="10">Launch-ID-en brukes opp.</text>
+  <text x="454.0" y="528" fill="#212121" font-size="10">Gir bare scopes klienten er registrert med.</text>
+  <text x="454.0" y="542" fill="#212121" font-size="10">Code varer i 60 sekunder.</text>
+  <line x1="750" y1="574" x2="96" y2="574" stroke="#7b1fa2" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#m-auth)"/>
+  <text x="420.0" y="569" text-anchor="middle" fill="#212121" class="lbl">302 → /smart/callback?code=…&amp;state=…</text>
+  <line x1="90" y1="604" x2="514" y2="604" stroke="#f57c00" stroke-width="1.4" marker-end="url(#m-br)"/>
+  <text x="305.0" y="599" text-anchor="middle" fill="#212121" class="lbl">GET /smart/callback?code=…&amp;state=…</text>
+  <rect x="12" y="628" width="1036" height="20" rx="3" fill="#eceff1"/>
+  <text x="22" y="642" font-weight="bold" fill="#37474f">3 · Token, server til server</text>
+  <rect x="528" y="654" width="200.79999999999998" height="22" rx="4" fill="white" stroke="#388e3c" stroke-width="1"/>
+  <text x="536" y="668" fill="#212121" font-size="10">state må være lik den i sesjonen.</text>
+  <line x1="520" y1="700" x2="744" y2="700" stroke="#388e3c" stroke-width="1.4" marker-end="url(#m-app)"/>
+  <text x="635.0" y="695" text-anchor="middle" fill="#212121" class="lbl">POST /oidc/token</text>
+  <text x="635.0" y="713" text-anchor="middle" fill="#616161" font-size="9.5" class="lbl">code, code_verifier, Basic-autentisering med client_secret</text>
+  <line x1="750" y1="739" x2="526" y2="739" stroke="#7b1fa2" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#m-auth)"/>
+  <text x="635.0" y="734" text-anchor="middle" fill="#212121" class="lbl">access_token, id_token, patient, encounter, scope</text>
+  <text x="635.0" y="752" text-anchor="middle" fill="#616161" font-size="9.5" class="lbl">encounter er konsultasjonen fra steg 1</text>
+  <line x1="520" y1="778" x2="744" y2="778" stroke="#388e3c" stroke-width="1.4" marker-end="url(#m-app)"/>
+  <text x="635.0" y="773" text-anchor="middle" fill="#212121" class="lbl">GET /oidc/jwks</text>
+  <text x="635.0" y="791" text-anchor="middle" fill="#616161" font-size="9.5" class="lbl">validerer id_token: signatur, utsteder, client_id, levetid</text>
+  <rect x="255.20000000000005" y="805" width="256.79999999999995" height="50" rx="4" fill="white" stroke="#388e3c" stroke-width="1"/>
+  <text x="263.20000000000005" y="819" fill="#212121" font-size="10">fhirUser = Practitioner/&lt;HPR&gt; fra id_token.</text>
+  <text x="263.20000000000005" y="833" fill="#212121" font-size="10">Token og kontekst lagres i serversesjonen,</text>
+  <text x="263.20000000000005" y="847" fill="#212121" font-size="10">aldri i nettleseren.</text>
+  <line x1="520" y1="879" x2="96" y2="879" stroke="#388e3c" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#m-app)"/>
+  <text x="305.0" y="874" text-anchor="middle" fill="#212121" class="lbl">302 → skjemaet</text>
+  <text x="305.0" y="892" text-anchor="middle" fill="#616161" font-size="9.5" class="lbl">lokalt: Altinn-sesjon via localtest-testbruker</text>
+  <rect x="12" y="912" width="1036" height="20" rx="3" fill="#eceff1"/>
+  <text x="22" y="926" font-weight="bold" fill="#37474f">4 · Forhåndsutfylling</text>
+  <line x1="90" y1="950" x2="514" y2="950" stroke="#f57c00" stroke-width="1.4" marker-end="url(#m-br)"/>
+  <text x="305.0" y="945" text-anchor="middle" fill="#212121" class="lbl">Åpner skjemaet (ny instans)</text>
+  <line x1="520" y1="980" x2="944" y2="980" stroke="#388e3c" stroke-width="1.4" marker-end="url(#m-app)"/>
+  <text x="735.0" y="975" text-anchor="middle" fill="#212121" class="lbl">GET Patient/{patient}</text>
+  <text x="735.0" y="993" text-anchor="middle" fill="#616161" font-size="9.5" class="lbl">Bearer access_token på alle kall</text>
+  <line x1="520" y1="1019" x2="944" y2="1019" stroke="#388e3c" stroke-width="1.4" marker-end="url(#m-app)"/>
+  <text x="735.0" y="1014" text-anchor="middle" fill="#212121" class="lbl">GET Practitioner/{HPR}  ·  PractitionerRole?practitioner=…  ·  Organization/{id}</text>
+  <line x1="520" y1="1049" x2="944" y2="1049" stroke="#388e3c" stroke-width="1.4" marker-end="url(#m-app)"/>
+  <text x="735.0" y="1044" text-anchor="middle" fill="#212121" class="lbl">GET Encounter/{encounter}  ·  Condition?patient=…&amp;encounter=…</text>
+  <rect x="797.2" y="1067" width="144.79999999999998" height="50" rx="4" fill="white" stroke="#e65100" stroke-width="1"/>
+  <text x="805.2" y="1081" fill="#212121" font-size="10">Data begrenses til</text>
+  <text x="805.2" y="1095" fill="#212121" font-size="10">legekontoret i tokenets</text>
+  <text x="805.2" y="1109" fill="#212121" font-size="10">orgnr-claim.</text>
+  <line x1="520" y1="1141" x2="96" y2="1141" stroke="#388e3c" stroke-width="1.4" stroke-dasharray="5,3" marker-end="url(#m-app)"/>
+  <text x="305.0" y="1136" text-anchor="middle" fill="#212121" class="lbl">Skjema med pasient, lege, legekontor, konsultasjon og diagnose</text>
+  <text x="530.0" y="1199" text-anchor="middle" font-size="10" fill="#424242">Nettleseren bærer bare launch-ID, code og state. Pasient og konsultasjon går bare fra nav-epj til appens server, i token-svaret.</text>
+</svg>
