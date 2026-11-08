@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
@@ -15,6 +16,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using SmartFhir.Common.Session;
 
 namespace SmartFhir.Common
@@ -149,8 +152,10 @@ namespace SmartFhir.Common
             var codeVerifier = GenerateCodeVerifier();
             var codeChallenge = GenerateCodeChallenge(codeVerifier);
 
-            // Generate state
-            var state = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+            // Generate state. URL-sikker base64 (uten +, / og =), fordi ikke alle EPJ-er URL-koder
+            // state i callback-redirecten — nav-epj gjør det ikke per 2026-11. En + blir da mellomrom
+            // og gir "State mismatch".
+            var state = Base64UrlEncode(RandomNumberGenerator.GetBytes(32));
 
             // Store in server session
             HttpContext.Session.SetString(StateSessionKey, state);
@@ -463,6 +468,16 @@ namespace SmartFhir.Common
                 return StatusCode(502, "Token exchange failed: no access token in response");
             }
 
+            // nav-epj (og OpenID Connect generelt) gir fhirUser kun som claim i id_token. Vi bruker det
+            // bare hvis id_token-en er gyldig: signatur mot EPJ-ens jwks_uri, utsteder, mottaker
+            // (vår client_id) og levetid.
+            if (string.IsNullOrEmpty(token.FhirUser) && !string.IsNullOrEmpty(token.IdToken))
+            {
+                token.FhirUser = await GetFhirUserFromIdTokenAsync(token.IdToken, smartConfig, clientId);
+                if (!string.IsNullOrEmpty(token.FhirUser))
+                    _logger.LogInformation("fhirUser hentet fra validert id_token");
+            }
+
             // Fallback bekreftet nødvendig mot launch.smarthealthit.org: fhirUser kom ikke som eget
             // toppnivåfelt i token-responsen for denne launch-konfigurasjonen, kun som claim i
             // access_token-JWT-en. Dekodes uten signaturvalidering — brukes kun til en FHIR-referanse
@@ -478,12 +493,7 @@ namespace SmartFhir.Common
             HttpContext.Session.SetString(TokenSessionKey, JsonSerializer.Serialize(token));
 
             // Store FHIR context for pre-fill
-            // FhirBaseUrlOverride finnes for vår egen lokale SMART-mock (iss er en Docker-intern
-            // http-adresse appen ikke kan nå direkte). Den skal IKKE brukes for ekte eksterne
-            // SMART-servere (https), ellers prøver prefill-klienten å hente pasientdata fra vår
-            // egen HAPI FHIR-mock med en pasient-ID fra en helt annen server (404/tom prefill).
-            var isRealExternalIssuer = iss?.StartsWith("https://", StringComparison.OrdinalIgnoreCase) == true;
-            var fhirBaseUrl = isRealExternalIssuer ? iss : (_config["SmartOnFhir:FhirBaseUrlOverride"] ?? iss);
+            var fhirBaseUrl = ResolveFhirBaseUrl(iss);
             var fhirContext = new FhirLaunchContext
             {
                 PatientId = token.Patient,
@@ -513,6 +523,80 @@ namespace SmartFhir.Common
             }
 
             return Redirect($"/{org}/{app}");
+        }
+
+        /// <summary>
+        /// Per SMART App Launch er iss selve FHIR-serverens base-URL, og den brukes som den er.
+        /// SmartOnFhir:FhirBaseUrlOverride brukes bare for utstedere som er listet i
+        /// SmartOnFhir:FhirBaseUrlOverrideIssuers — vår egen lokale smart-mock, der iss er
+        /// auth-mocken og FHIR-dataene ligger i en egen HAPI FHIR-server. Tidligere ble overstyringen
+        /// brukt for alle http-utstedere, noe som sendte prefill-kall for en lokal EPJ på http
+        /// (f.eks. nav-epj) til feil FHIR-server.
+        /// </summary>
+        private string ResolveFhirBaseUrl(string iss)
+        {
+            var overrideUrl = _config["SmartOnFhir:FhirBaseUrlOverride"];
+            var overrideIssuers =
+                _config.GetSection("SmartOnFhir:FhirBaseUrlOverrideIssuers").Get<List<string>>() ?? new();
+            var useOverride =
+                !string.IsNullOrEmpty(overrideUrl)
+                && overrideIssuers.Any(i =>
+                    string.Equals(i.TrimEnd('/'), iss?.TrimEnd('/'), StringComparison.OrdinalIgnoreCase)
+                );
+            return useOverride ? overrideUrl : iss;
+        }
+
+        /// <summary>
+        /// Validerer id_token mot EPJ-ens publiserte nøkler (jwks_uri fra SMART-konfigurasjonen) og
+        /// returnerer fhirUser-claimet. Returnerer null — og logger hvorfor — hvis tokenet ikke kan
+        /// valideres, slik at et uverifisert claim aldri styrer hvilken behandler som forhåndsutfylles.
+        /// </summary>
+        private async Task<string> GetFhirUserFromIdTokenAsync(
+            string idToken,
+            SmartConfiguration smartConfig,
+            string clientId
+        )
+        {
+            if (string.IsNullOrEmpty(smartConfig.JwksUri))
+            {
+                _logger.LogWarning("SMART-konfigurasjonen har ingen jwks_uri — kan ikke validere id_token");
+                return null;
+            }
+
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                var jwksJson = await client.GetStringAsync(smartConfig.JwksUri);
+                var keys = new JsonWebKeySet(jwksJson).GetSigningKeys();
+
+                var parameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKeys = keys,
+                    ValidateAudience = true,
+                    ValidAudience = clientId,
+                    // SMART-konfigurasjonen trenger ikke oppgi issuer. Når den gjør det, må id_token
+                    // være utstedt av den.
+                    ValidateIssuer = !string.IsNullOrEmpty(smartConfig.Issuer),
+                    ValidIssuer = smartConfig.Issuer,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(1),
+                };
+
+                var result = await new JsonWebTokenHandler().ValidateTokenAsync(idToken, parameters);
+                if (!result.IsValid)
+                {
+                    _logger.LogWarning(result.Exception, "id_token er ikke gyldig — ignorerer fhirUser fra det");
+                    return null;
+                }
+
+                return result.Claims.TryGetValue("fhirUser", out var fhirUser) ? fhirUser?.ToString() : null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Kunne ikke validere id_token mot {JwksUri}", smartConfig.JwksUri);
+                return null;
+            }
         }
 
         private async Task<SmartConfiguration> DiscoverSmartConfiguration(string iss)
@@ -803,6 +887,12 @@ namespace SmartFhir.Common
 
             [JsonPropertyName("token_endpoint")]
             public string TokenEndpoint { get; set; }
+
+            [JsonPropertyName("jwks_uri")]
+            public string JwksUri { get; set; }
+
+            [JsonPropertyName("issuer")]
+            public string Issuer { get; set; }
         }
 
         private class TokenResponse
@@ -818,6 +908,9 @@ namespace SmartFhir.Common
 
             [JsonPropertyName("refresh_token")]
             public string RefreshToken { get; set; }
+
+            [JsonPropertyName("id_token")]
+            public string IdToken { get; set; }
 
             // Serveren kan innvilge et smalere scope enn det som ble forespurt — sammenlign alltid
             // dette mot forespurt scope før man forutsetter en tilgang er innvilget.
