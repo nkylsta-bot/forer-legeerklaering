@@ -1,8 +1,9 @@
 # nav-epj-testing
 
-Verktøy for å sette opp og teste [`navikt/nav-epj`](https://github.com/navikt/nav-epj) lokalt som et Norway-tilpasset SMART on FHIR-testmiljø (korrekte fnr/HPR-OID-er, i motsetning til launch.smarthealthit.org). Full forklaring: [docs/NAV-EPJ-TESTMILJO.md](../../docs/NAV-EPJ-TESTMILJO.md).
+Klientregistreringen appen trenger for å kunne startes fra [`navikt/nav-epj`](https://github.com/navikt/nav-epj) lokalt.
 
-- `nav-epj-local-fixes.patch` — git-patch med seks rettelser som er nødvendige for at `nav-epj` sin SMART-launch-flyt skal fungere i det hele tatt (den er per 2026-08-20 helt ikke-funksjonell uten disse, for alle klienter). Anvend med `git apply` fra roten av en `nav-epj`-klone.
-- `seed-and-get-launch-url.ps1` — oppretter en testpasient + konsultasjon + diagnose via `nav-epj` sitt REST-API, og skriver ut en ferdig launch-URL som kan limes inn i en nettleser for å teste hele flyten manuelt.
+- `forer-legeerklaering-client.yaml` — limes inn i `smart.clients` i nav-epj sin `src/main/resources/application-local.yaml`.
 
-Ingen av disse er sendt til NAV — se §5 i testguiden for anbefaling om det.
+Hele oppsettet og testscenarioene står i [docs/LOKALT-MED-NAV-EPJ.md](../../docs/LOKALT-MED-NAV-EPJ.md).
+
+Patchen og seed-skriptet som lå her før, er fjernet. De var skrevet mot nav-epj slik den var i august 2026, og gjelder ikke lenger.

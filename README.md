@@ -75,12 +75,15 @@ Alle dokumentene under er også samlet i [DOKUMENTASJON-KOMPLETT.md](DOKUMENTASJ
 | [STRATEGI.md](docs/STRATEGI.md) | Produktvisjon, to spor (Førerrett PoC / Altinn Health Integration Framework), samarbeidsmodell, gevinsthypotese og nasjonal roadmap |
 | [HACKATHON-EHIN-2026.md](docs/HACKATHON-EHIN-2026.md) | Forberedelse til Norwegian FHIR Hackathon 2026 (EHiN-pre-konferanse, 9. nov) — gap-analyse mot SMART-sporets bronse/sølv/gull-krav |
 | [TESTGUIDE-SMARTHEALTHIT.md](docs/TESTGUIDE-SMARTHEALTHIT.md) | Hvordan reprodusere alle SMART-launch-testene mot launch.smarthealthit.org selv: klienttyper, secrets, Simulated Error-scenarioer, og status på automatiske tester (ingen finnes) |
-| [NAV-EPJ-TESTMILJO.md](docs/NAV-EPJ-TESTMILJO.md) | Hvordan sette opp `navikt/nav-epj` lokalt som et Norway-tilpasset SMART on FHIR-testmiljø (korrekte fnr/HPR-OID-er) — inkl. seks bugs som må rettes, miljø-fallgruver, og hvordan teste både automatisert og som menneske i en nettleser |
+| [LOKALT-MED-NAV-EPJ.md](docs/LOKALT-MED-NAV-EPJ.md) | Kjør appen lokalt med NAVs test-EPJ `navikt/nav-epj`: oppsett, klientregistrering og testscenarioer |
+| [NAV-EPJ-TESTMILJO.md](docs/NAV-EPJ-TESTMILJO.md) | Utdatert: nav-epj slik den var i august 2026, med feil og patch som ikke lenger gjelder. Se LOKALT-MED-NAV-EPJ.md |
 | [EPIC-TESTMILJO.md](docs/EPIC-TESTMILJO.md) | Epic on FHIR-sandkassen som testmiljø — relevant fordi Helseplattformen kjører Epic. Registrerings-URL, sandkasse-detaljer, teknisk sammenligning mot det vi allerede har testet, og sjekkliste klar til bruk når konto er registrert |
 
 ---
 
 ## Kom i gang (lokalt utviklingsmiljø)
+
+> Vil du teste med en ekte SMART-launch fra en EPJ med norske testdata, følg [docs/LOKALT-MED-NAV-EPJ.md](docs/LOKALT-MED-NAV-EPJ.md) i stedet. Oppskriften under bruker repoets egen SMART-mock.
 
 ### Forutsetninger
 

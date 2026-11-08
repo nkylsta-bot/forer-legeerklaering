@@ -1,0 +1,26 @@
+    # Lim inn denne blokken nederst i smart.clients i nav-epj sin
+    # src/main/resources/application-local.yaml, rett over linjen "valkey:".
+    # Se docs/LOKALT-MED-NAV-EPJ.md.
+    - clientId: "forer-legeerklaering-poc"
+      name: "Legeerklæring førerrett"
+      description: "Helseattest førerett (IS-2569) i Altinn, forhåndsutfylt fra EPJ."
+      launchMode: "tab"
+      redirectUris: [ "http://local.altinn.cloud:8000/digdir/forer-legeerklaering/smart/callback" ]
+      launchUris: [ "http://local.altinn.cloud:8000/digdir/forer-legeerklaering/smart/launch" ]
+      tokenEndpointAuthMethod: "client_secret_basic"
+      clientSecret: "local-dev-secret"
+      scopes:
+        - openid
+        - profile
+        - fhirUser
+        - launch
+        - launch/patient
+        - launch/encounter
+        - offline_access
+        - patient/Patient.rs
+        - patient/Encounter.rs
+        - patient/Condition.rs
+        - patient/DocumentReference.c
+        - user/Practitioner.rs
+        - user/PractitionerRole.rs
+        - user/Organization.rs
