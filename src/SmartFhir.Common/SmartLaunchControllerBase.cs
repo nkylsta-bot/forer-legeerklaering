@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -118,6 +119,17 @@ namespace SmartFhir.Common
                 "user/Organization.read",
                 "user/PractitionerRole.read",
             };
+
+        /// <summary>
+        /// The public key set for the app's SMART Backend Services key, which the EHR registers as
+        /// the client's jwksUri. Only available when the app registers SmartBackendKeyProvider.
+        /// </summary>
+        [HttpGet("jwks.json")]
+        public IActionResult Jwks()
+        {
+            var keyProvider = HttpContext.RequestServices.GetService<Backend.SmartBackendKeyProvider>();
+            return keyProvider is null ? NotFound() : new JsonResult(keyProvider.PublicJwks);
+        }
 
         /// <summary>
         /// Entry point for EHR Launch. EPJ redirects here with iss and launch parameters.

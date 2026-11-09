@@ -23,6 +23,10 @@ void RegisterCustomAppServices(IServiceCollection services, IConfiguration confi
         Altinn.App.Core.Features.Process.IOnTaskEndingHandler,
         Altinn.App.Services.ForerKonklusjonTaskEndingHandler
     >();
+
+    // Skriver PDF-en tilbake til EPJ-et etter innsending, med et eget systemtoken (SMART Backend Services)
+    SmartFhir.Common.Backend.SmartBackendServiceCollectionExtensions.AddSmartBackendServices(services);
+    services.AddTransient<Altinn.App.Core.Features.Process.IServiceTask, Altinn.App.Services.EpjWritebackServiceTask>();
 }
 
 // ###########################################################################

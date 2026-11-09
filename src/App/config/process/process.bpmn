@@ -35,14 +35,24 @@
         </altinn:taskExtension>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1toEnd</bpmn:incoming>
-      <bpmn:outgoing>Flow_PdfTask_Task_1_to_EndEvent_1</bpmn:outgoing>
+      <bpmn:outgoing>Flow_PdfTask_Task_1_to_EpjWriteback</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="EpjWriteback" name="Skriv tilbake til EPJ">
+      <bpmn:extensionElements>
+        <altinn:taskExtension>
+          <altinn:taskType>epjWriteback</altinn:taskType>
+        </altinn:taskExtension>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_PdfTask_Task_1_to_EpjWriteback</bpmn:incoming>
+      <bpmn:outgoing>Flow_EpjWriteback_to_EndEvent_1</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="EndEvent_1">
-      <bpmn:incoming>Flow_PdfTask_Task_1_to_EndEvent_1</bpmn:incoming>
+      <bpmn:incoming>Flow_EpjWriteback_to_EndEvent_1</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1n56yn5" sourceRef="StartEvent_1" targetRef="Task_1" />
     <bpmn:sequenceFlow id="SequenceFlow_1toEnd" sourceRef="Task_1" targetRef="PdfTask_Task_1" />
-    <bpmn:sequenceFlow id="Flow_PdfTask_Task_1_to_EndEvent_1" sourceRef="PdfTask_Task_1" targetRef="EndEvent_1" />
+    <bpmn:sequenceFlow id="Flow_PdfTask_Task_1_to_EpjWriteback" sourceRef="PdfTask_Task_1" targetRef="EpjWriteback" />
+    <bpmn:sequenceFlow id="Flow_EpjWriteback_to_EndEvent_1" sourceRef="EpjWriteback" targetRef="EndEvent_1" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="SingleDataTask">
@@ -66,9 +76,16 @@
       <bpmndi:BPMNShape id="PdfTask_Task_1_di" bpmnElement="PdfTask_Task_1">
         <dc:Bounds x="260" y="199" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_PdfTask_Task_1_to_EndEvent_1_di" bpmnElement="Flow_PdfTask_Task_1_to_EndEvent_1">
+      <bpmndi:BPMNShape id="EpjWriteback_di" bpmnElement="EpjWriteback">
+        <dc:Bounds x="400" y="199" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_PdfTask_Task_1_to_EpjWriteback_di" bpmnElement="Flow_PdfTask_Task_1_to_EpjWriteback">
         <di:waypoint x="360" y="239" />
-        <di:waypoint x="430" y="99" />
+        <di:waypoint x="400" y="239" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_EpjWriteback_to_EndEvent_1_di" bpmnElement="Flow_EpjWriteback_to_EndEvent_1">
+        <di:waypoint x="450" y="199" />
+        <di:waypoint x="448" y="117" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

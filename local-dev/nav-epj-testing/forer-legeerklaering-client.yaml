@@ -24,3 +24,12 @@
         - user/Practitioner.rs
         - user/PractitionerRole.rs
         - user/Organization.rs
+    # Systemklienten appen bruker for å skrive PDF-en tilbake til journalen etter innsending
+    # (SMART Backend Services). Appen publiserer den offentlige nøkkelen sin på jwksUri.
+    - clientId: "forer-legeerklaering-backend"
+      name: "Legeerklæring førerrett (system)"
+      tokenEndpointAuthMethod: "private_key_jwt"
+      jwksUri: "http://local.altinn.cloud:8000/digdir/forer-legeerklaering/smart/jwks.json"
+      grantTypes: [ "client_credentials" ]
+      scopes:
+        - system/DocumentReference.crs
