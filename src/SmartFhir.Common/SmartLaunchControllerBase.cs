@@ -89,9 +89,9 @@ namespace SmartFhir.Common
         /// <summary>
         /// Altinn localtest-userId brukt av /smart/dev-login når ingen userId er oppgitt i
         /// spørringen, og av /smart/callback når en launch ikke har en Altinn-sesjon. Default
-        /// (14050 = Gul Barnestol) er testlegen definert i App/wwwroot/testData.json, som localtest
-        /// legger til de innebygde testbrukerne. Overstyr hvis appens naturlige "hvem logger inn"
-        /// er en annen testperson.
+        /// (14050 = Gul Barnestol) er testlegen definert i App/wwwroot/testData.json. Når alle appene
+        /// som kjører, har egne testdata, bruker localtest bare dem og ikke de innebygde testbrukerne.
+        /// Overstyr hvis appens naturlige "hvem logger inn" er en annen testperson.
         /// </summary>
         protected virtual int DefaultUserId => 14050;
 
