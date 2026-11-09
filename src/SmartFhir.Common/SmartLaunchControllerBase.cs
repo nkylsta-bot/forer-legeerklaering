@@ -88,14 +88,15 @@ namespace SmartFhir.Common
 
         /// <summary>
         /// Altinn localtest-userId brukt av /smart/dev-login når ingen userId er oppgitt i
-        /// spørringen. Default (12345 = Ola Nordmann) er den generiske localtest-testbrukeren —
-        /// overstyr hvis appens naturlige "hvem logger inn" er en annen navngitt testperson
-        /// (se App/wwwroot/testData.json).
+        /// spørringen, og av /smart/callback når en launch ikke har en Altinn-sesjon. Default
+        /// (14050 = Gul Barnestol) er testlegen definert i App/wwwroot/testData.json, som localtest
+        /// legger til de innebygde testbrukerne. Overstyr hvis appens naturlige "hvem logger inn"
+        /// er en annen testperson.
         /// </summary>
-        protected virtual int DefaultUserId => 12345;
+        protected virtual int DefaultUserId => 14050;
 
         /// <summary>Altinn localtest-partyId som hører sammen med <see cref="DefaultUserId"/>.</summary>
-        protected virtual int DefaultPartyId => 512345;
+        protected virtual int DefaultPartyId => 514050;
 
         /// <summary>
         /// SMART-scopes appen ber om. Default dekker de standard-ressursene
