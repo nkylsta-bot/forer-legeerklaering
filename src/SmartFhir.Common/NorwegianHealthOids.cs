@@ -11,8 +11,14 @@ namespace SmartFhir.Common
     /// </summary>
     public static class NorwegianHealthOids
     {
-        /// <summary>Fødselsnummer/D-nummer (FHIR Patient.identifier.system).</summary>
+        /// <summary>Fødselsnummer (FHIR Patient.identifier.system).</summary>
         public const string Fnr = "urn:oid:2.16.578.1.12.4.1.4.1";
+
+        /// <summary>D-nummer (FHIR Patient.identifier.system).</summary>
+        public const string Dnr = "urn:oid:2.16.578.1.12.4.1.4.2";
+
+        /// <summary>ICD-10 (FHIR Condition.code.coding.system), Volven 7110.</summary>
+        public const string Icd10 = "urn:oid:2.16.578.1.12.4.1.1.7110";
 
         /// <summary>HPR-nummer — gjelder all autorisert helsepersonell, ikke bare leger.</summary>
         public const string Hpr = "urn:oid:2.16.578.1.12.4.1.4.4";

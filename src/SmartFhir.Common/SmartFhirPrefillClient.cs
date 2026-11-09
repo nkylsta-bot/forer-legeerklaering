@@ -70,6 +70,7 @@ namespace SmartFhir.Common
             var root = doc.RootElement;
 
             data.Pasient_Fnr = GetIdentifier(root, NorwegianHealthOids.Fnr);
+            data.Pasient_Dnr = GetIdentifier(root, NorwegianHealthOids.Dnr);
             data.Pasient_Fodselsdato = root.TryGetProperty("birthDate", out var bd) ? bd.GetString() : null;
             data.Pasient_Kjonn = root.TryGetProperty("gender", out var g) ? g.GetString() : null;
 
@@ -221,7 +222,7 @@ namespace SmartFhir.Common
                 return;
 
             var url =
-                $"{ctx.FhirBaseUrl}/Condition?patient={ctx.PatientId}&clinical-status=active&_sort=-recorded-date&_count=1";
+                $"{ctx.FhirBaseUrl}/Condition?patient={ctx.PatientId}&clinical-status=active&_sort=-recorded-date";
             if (!string.IsNullOrEmpty(ctx.EncounterId))
                 url += $"&encounter={ctx.EncounterId}";
 
@@ -243,6 +244,28 @@ namespace SmartFhir.Common
                 var coding = codings[0];
                 data.Diagnose_Kode = coding.TryGetProperty("code", out var c) ? c.GetString() : null;
                 data.Diagnose_Tekst = coding.TryGetProperty("display", out var d) ? d.GetString() : null;
+            }
+
+            foreach (var entry in entries.EnumerateArray())
+            {
+                if (
+                    !entry.TryGetProperty("resource", out var resource)
+                    || !resource.TryGetProperty("code", out var resourceCode)
+                    || !resourceCode.TryGetProperty("coding", out var resourceCodings)
+                )
+                    continue;
+                foreach (var coding in resourceCodings.EnumerateArray())
+                {
+                    if (
+                        coding.TryGetProperty("system", out var system)
+                        && system.GetString() == NorwegianHealthOids.Icd10
+                    )
+                    {
+                        data.Diagnose_Icd10Kode = coding.TryGetProperty("code", out var c) ? c.GetString() : null;
+                        data.Diagnose_Icd10Tekst = coding.TryGetProperty("display", out var d) ? d.GetString() : null;
+                        return;
+                    }
+                }
             }
         }
 
