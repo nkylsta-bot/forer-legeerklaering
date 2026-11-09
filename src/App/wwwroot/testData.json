@@ -35,5 +35,26 @@
       "userName": "GulBarnestol"
     }
   ],
-  "orgs": []
+  "orgs": [
+    {
+      "partyId": 500006,
+      "partyUuid": "00000000-0000-0000-0000-000000500006",
+      "orgNumber": "991825827",
+      "parentPartyId": null,
+      "name": "Digitaliseringsdirektoratet",
+      "businessAddress": "Lørenfaret 1C",
+      "businessPostalCity": "Oslo",
+      "businessPostalCode": "0580",
+      "eMailAddress": "postmottak@digdir.no",
+      "faxNumber": "",
+      "internetAddress": "https://digdir.no",
+      "mailingAddress": "Postboks 1382 Vika",
+      "mailingPostalCity": "Oslo",
+      "mailingPostalCode": "0114",
+      "mobileNumber": "",
+      "telephoneNumber": "",
+      "unitStatus": null,
+      "unitType": "STAT"
+    }
+  ]
 }
