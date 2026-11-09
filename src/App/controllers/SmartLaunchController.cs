@@ -1,9 +1,4 @@
-using System.Collections.Generic;
-using System.Net.Http;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using SmartFhir.Common;
 
 namespace Altinn.App.Controllers

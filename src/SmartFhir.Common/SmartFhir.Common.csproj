@@ -22,4 +22,8 @@
          relevante for det konkrete appen som arver denne klassen. -->
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Validering av id_token (fhirUser). Samme versjon som Altinn.App.Core 8.6.4 drar inn. -->
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.7.0" />
+  </ItemGroup>
 </Project>

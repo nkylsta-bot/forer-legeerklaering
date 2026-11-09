@@ -56,6 +56,7 @@
   <div class="wrap guide-layout">
     <nav class="guide-nav" aria-label="Innhold på siden">
       <a href="#verifisert" data-anchor="verifisert">Verifisert vs. planlagt</a>
+      <a href="#tt02" data-anchor="tt02">Mot TT02</a>
       <a href="#veikart" data-anchor="veikart">Veikart</a>
       <a href="#risiko" data-anchor="risiko">Risiko</a>
       <a href="#beslutninger" data-anchor="beslutninger">Åpne beslutninger</a>
@@ -74,10 +75,11 @@
             <tbody>
               <tr><td>Pasienten fyller ut egenerklæring (NA-0201) digitalt</td><td><span class="pill warn">Delvis</span></td><td>Helsenorge-mekanismene (oppgave, skjemaoppgave, kopi) er verifisert; selve egenerklæringsskjemaet og HTTPS-nåbar lenke er ikke bygget</td></tr>
               <tr><td>EPJ → Altinn: SMART EHR Launch</td><td><span class="pill ok">Verifisert</span></td><td>Mot launch.smarthealthit.org, inkl. innlogging, pasientvalg og full prefill. Syv feil funnet og rettet</td></tr>
+              <tr><td>EPJ → Altinn mot NAVs <code>nav-epj</code></td><td><span class="pill ok">Verifisert lokalt</span></td><td>2026-11-08: launch fra nav-epj, validert id_token og full prefill med norske testdata. Krevde tre rettelser i appen. Se <a href="#tt02">Mot TT02</a></td></tr>
               <tr><td>Altinn-sesjon for legen</td><td><span class="pill warn">Mitigert i dev</span></td><td>Auto-innlogging via localtests testbruker i <code>/smart/callback</code> finnes ikke i produksjon (R10)</td></tr>
-              <tr><td>Altinn henter FHIR-data</td><td><span class="pill ok">Verifisert</span></td><td>Mot lokal HAPI FHIR-mock og testserveren — ikke mot et reelt fastlege-EPJ (R1)</td></tr>
+              <tr><td>Altinn henter FHIR-data</td><td><span class="pill ok">Verifisert</span></td><td>Mot lokal HAPI FHIR-mock, testserveren og fra 2026-11-08 nav-epj med norske OID-er — ikke mot et reelt fastlege-EPJ (R1)</td></tr>
               <tr><td>Legen fyller ut, signerer og sender inn</td><td><span class="pill ok">Verifisert</span></td><td>«Signer og send inn», <code>Task_1</code></td></tr>
-              <tr><td>Full attest skrives tilbake til EPJ</td><td><span class="pill warn">Mekanikk bevist</span></td><td><code>POST DocumentReference</code> ga 201 mot launch.smarthealthit.org, men med plassholder-innhold; ikke PDF, ikke idempotent</td></tr>
+              <tr><td>Full attest skrives tilbake til EPJ</td><td><span class="pill ok">Verifisert mot nav-epj</span></td><td>2026-11-09: PDF-en skrives tilbake som journalnotat etter innsending, med et systemtoken fra SMART Backend Services. Krever vår fork av nav-epj</td></tr>
               <tr><td>Konklusjon til Statens vegvesen</td><td><span class="pill warn">Modell verifisert</span></td><td>Datamodell finnes; Events-abonnementet hos SVV er ikke avtalt</td></tr>
               <tr><td>Helsenorge EksternAPI (oppgave, skjemaoppgave, kopi)</td><td><span class="pill ok">Verifisert</span></td><td>Fire flyter mot TEST02. Se <a href="../helsenorge/">Helsenorge</a></td></tr>
               <tr><td>Epic on FHIR-sandkassen som testmiljø</td><td><span class="pill bad">Blokkert</span></td><td>Se <a href="#avhengigheter">eksterne avhengigheter</a></td></tr>
@@ -85,6 +87,30 @@
           </table>
         </div>
         <p class="footnote" style="margin-top:var(--ds-size-3);">Kilde: <a class="ds-link" href="https://github.com/FinnurO/forer-legeerklaering/blob/main/docs/HELHETLIG-FLYT.md" target="_blank" rel="noopener"><code>docs/HELHETLIG-FLYT.md</code></a>. Statusen er dokumentert per datoene i kildefilene, ikke automatisk oppdatert.</p>
+      </section>
+
+      <section id="tt02">
+        <span class="section-num">Neste steg</span>
+        <h2>Fra lokal nav-epj til TT02</h2>
+        <p class="intro">Appen kan startes fra NAVs test-EPJ <code>nav-epj</code> lokalt, og NAV har en åpen, driftet instans som et TT02-oppsett kan bruke. Oppsett og testscenarioer: <a class="ds-link" href="https://github.com/FinnurO/forer-legeerklaering/blob/main/docs/LOKALT-MED-NAV-EPJ.md" target="_blank" rel="noopener"><code>docs/LOKALT-MED-NAV-EPJ.md</code></a>.</p>
+        <h3>Endret i appen 2026-11-08</h3>
+        <ul>
+          <li><strong>Lege fra id_token:</strong> nav-epj gir <code>fhirUser</code> bare i id_token. Appen validerer nå id_token mot EPJ-ens nøkler og leser legen derfra.</li>
+          <li><strong>Riktig FHIR-adresse:</strong> <code>iss</code> brukes som FHIR-adresse. Overstyringen gjelder bare repoets egen mock.</li>
+          <li><strong>URL-sikker <code>state</code>:</strong> nav-epj URL-koder ikke <code>state</code> i callbacken, noe som ga «State mismatch» omtrent annenhver gang.</li>
+        </ul>
+        <h3>Gjenstår før TT02</h3>
+        <ol>
+          <li>Eget Altinn Studio-repo med appen på roten og en Dockerfile. Det delte biblioteket må kopieres inn eller publiseres som NuGet-pakke.</li>
+          <li>Dobbel innlogging i første omgang: HelseID hos nav-epj, deretter ID-porten i Altinn (R10).</li>
+          <li>SMART-tilstanden må ut av serverminnet, fordi TT02 kjører flere replikaer (R11).</li>
+          <li>Issuer-allowlist for den driftede nav-epj, og hemmeligheter fra Azure Key Vault.</li>
+          <li>NAV må registrere klienten med TT02-adressene og launch-modus <code>tab</code>.</li>
+          <li>Bekrefte at TT02-appen når <code>epj.ekstern.dev.nav.no</code>.</li>
+          <li>Appens nøkkel for skriving tilbake i Azure Key Vault, og systemklienten registrert hos NAV.</li>
+          <li>NAV må ta inn endringene fra vår fork av nav-epj for at den driftede instansen skal ta imot PDF-er.</li>
+        </ol>
+        <p class="footnote" style="margin-top:var(--ds-size-3);">Detaljer og funn: <a class="ds-link" href="https://github.com/FinnurO/forer-legeerklaering/blob/main/docs/HELHETLIG-FLYT.md#nav-epj-og-veien-mot-tt02-2026-11-08" target="_blank" rel="noopener"><code>docs/HELHETLIG-FLYT.md</code></a>.</p>
       </section>
 
       <section id="veikart">
@@ -148,7 +174,8 @@
         <ul>
           <li><strong>Epic on FHIR (sandkasse):</strong> Helseplattformen kjører Epic, så sandkassen er et relevant testmiljø. LaunchPad-feilen ble rettet av Epic, men selve <code>/oauth2/authorize</code> svarer fortsatt med en generisk autorisasjonsfeil, og alle årsakene Epics egen feilsøkingsside lister er sjekket og utelukket hos oss. Status per 2026-09-16 var uendret blokkert i påvente av at Epic ser på egne logger. Se <a class="ds-link" href="https://github.com/FinnurO/forer-legeerklaering/blob/main/docs/EPIC-TESTMILJO.md" target="_blank" rel="noopener"><code>docs/EPIC-TESTMILJO.md</code></a> for siste status.</li>
           <li><strong>NHN-testmiljø:</strong> Helsenorge-portalen kan bare nås fra IP-adresser NHN har åpnet. Se <a href="../helsenorge/#funn">Helsenorge</a>.</li>
-          <li><strong>Fastlege-EPJ:</strong> hva leverandørene faktisk støtter av SMART og FHIR er ikke kartlagt mot reelle systemer (R1). NAVs <code>nav-epj</code> kan settes opp lokalt som et Norge-tilpasset SMART-testmiljø; se <a class="ds-link" href="https://github.com/FinnurO/forer-legeerklaering/blob/main/docs/NAV-EPJ-TESTMILJO.md" target="_blank" rel="noopener"><code>docs/NAV-EPJ-TESTMILJO.md</code></a>.</li>
+          <li><strong>Fastlege-EPJ:</strong> hva leverandørene faktisk støtter av SMART og FHIR er ikke kartlagt mot reelle systemer (R1). NAVs <code>nav-epj</code> er et Norge-tilpasset testmiljø som virker lokalt; se <a class="ds-link" href="https://github.com/FinnurO/forer-legeerklaering/blob/main/docs/LOKALT-MED-NAV-EPJ.md" target="_blank" rel="noopener"><code>docs/LOKALT-MED-NAV-EPJ.md</code></a>.</li>
+          <li><strong>NAV (nav-epj):</strong> den driftede instansen på <code>epj.ekstern.dev.nav.no</code> er åpen, men NAV registrerer hver klient manuelt med en utrulling. Det trengs før TT02.</li>
           <li><strong>Statens vegvesen:</strong> Events-abonnement og mottakssystem er ikke avtalt.</li>
         </ul>
       </section>

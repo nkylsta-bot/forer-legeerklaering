@@ -1,6 +1,6 @@
-﻿# forer-legeerklaering — Samlet dokumentasjon
+# forer-legeerklaering — Samlet dokumentasjon
 
-**Generert:** 2026-09-21
+**Generert:** 2026-11-09
 **Kilde:** `docs/` — rekkefølge etter tabell i README.md. Generert av `docs/generate-samlet-dokumentasjon.ps1` — kjør skriptet på nytt etter endringer i docs/*.md, rediger ikke denne filen direkte.
 
 ---
@@ -24,8 +24,9 @@
 15. [Strategi](#15-strategi)
 16. [Norwegian FHIR Hackathon 2026 - forberedelse](#16-norwegian-fhir-hackathon-2026---forberedelse)
 17. [Testguide: SMART EHR Launch mot launch.smarthealthit.org](#17-testguide-smart-ehr-launch-mot-launchsmarthealthitorg)
-18. [nav-epj som lokalt SMART on FHIR-testmiljo](#18-nav-epj-som-lokalt-smart-on-fhir-testmiljo)
-19. [Epic on FHIR som testmiljo (Helseplattformen)](#19-epic-on-fhir-som-testmiljo-helseplattformen)
+18. [Kjør appen lokalt med nav-epj](#18-kjør-appen-lokalt-med-nav-epj)
+19. [nav-epj som lokalt SMART on FHIR-testmiljo](#19-nav-epj-som-lokalt-smart-on-fhir-testmiljo)
+20. [Epic on FHIR som testmiljo (Helseplattformen)](#20-epic-on-fhir-som-testmiljo-helseplattformen)
 
 ---
 
@@ -33,7 +34,7 @@
 
 # Helhetlig flyt: Pasient → Helsenorge → EPJ/Altinn → SVV
 
-**Dato:** 2026-08-11
+**Dato:** 2026-08-11, oppdatert 2026-11-08 med nav-epj og veien mot TT02
 **Formål:** Binde sammen de fire aktørene som til nå har vært beskrevet i separate dokumenter — Altinn Studio-appen, Helsenorge.no, EPJ-systemet og Statens vegvesen (SVV) — i én sammenhengende beskrivelse. Ingen enkelt eksisterende dokument viser hele reisen; se «Kilder for hvert steg» nederst for hvor detaljene faktisk står.
 
 ---
@@ -109,15 +110,73 @@ Pasient (Helsenorge.no)      EPJ (fastlege)         Altinn Studio-app (BFF)     
 |---|---|---|---|
 | 1 | Pasient fyller ut egenerklæring via Helsenorge | ❌ Ikke implementert — kun arkitekturforslag (to alternativer) | [PASIENTFLYT.md](PASIENTFLYT.md) |
 | 2 | EPJ → Altinn: SMART EHR Launch, full ende-til-ende | ✅ **Fullstendig verifisert 2026-08-11** mot [launch.smarthealthit.org](https://launch.smarthealthit.org/) — innlogging, pasientvalg, callback, Altinn-sesjon og full FHIR-prefill (pasient/lege/virksomhet). 7 bugs funnet og rettet | [IMPLEMENTERING.md §13](IMPLEMENTERING.md), [SmartLaunchController.cs](../src/App/controllers/SmartLaunchController.cs) |
+| 2c | EPJ → Altinn mot NAVs `nav-epj` med norske testdata | ✅ **Verifisert lokalt 2026-11-08.** Launch fra nav-epj, token-utveksling, validert id_token og full prefill av pasient, lege, legekontor, konsultasjon og diagnose. Krevde tre rettelser i appen og én lokal linjeendring i nav-epj, se under | [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md) |
 | 2b | Altinn-sesjon etableres for legen | ⚠️ Mitigert i dev (auto-innlogging via localtest-testbruker i `/smart/callback`), men ikke en produksjonsløsning — se §14 for det egentlige forslaget (HelseID-identitet) | [RISIKOREGISTER.md R10](RISIKOREGISTER.md), [VEIKART.md fase 1](VEIKART.md) |
-| 3 | Altinn henter FHIR-data fra EPJ | ✅ Verifisert (mot lokal HAPI FHIR-mock, ikke reell fastlege-EPJ) | [FhirPrefillService.cs](../src/App/services/FhirPrefillService.cs), [RISIKOREGISTER.md R1](RISIKOREGISTER.md) |
+| 3 | Altinn henter FHIR-data fra EPJ | ✅ Verifisert mot lokal HAPI FHIR-mock, og 2026-11-08 mot nav-epj med norske OID-er for fødselsnummer, HPR-nummer og organisasjonsnummer. Ikke mot et reelt fastlege-EPJ | [FhirPrefillService.cs](../src/App/services/FhirPrefillService.cs), [RISIKOREGISTER.md R1](RISIKOREGISTER.md) |
 | 3b | Altinn henter pasientens egenerklæring (QuestionnaireResponse) | ❌ Ikke implementert — avhenger av steg 1 | [PASIENTFLYT.md §3](PASIENTFLYT.md) |
 | 4 | Lege fyller ut, signerer, sender inn | ✅ Verifisert («Signer og send inn», Task_1) | [process.bpmn](../src/App/config/process/process.bpmn) |
-| 5a | Full attest skrives tilbake til EPJ | ⚠️ Skrivemekanikk bevist 2026-08-11 (`POST DocumentReference` → `HTTP 201` mot launch.smarthealthit.org), men placeholder-innhold, ikke PDF/idempotens | [VEIKART.md fase 2](VEIKART.md), [IMPLEMENTERING.md §13](IMPLEMENTERING.md) |
+| 5a | Full attest skrives tilbake til EPJ | ✅ **Verifisert mot nav-epj 2026-11-09.** Etter innsending skriver en egen service task PDF-en tilbake som et journalnotat på konsultasjonen, med et systemtoken fra SMART Backend Services. Krever vår fork av nav-epj, som tar imot PDF-er. Gjenstår: en ny innsending etter en vellykket skriving kan gi et dokument til | [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md), [EpjWritebackServiceTask.cs](../src/App/services/EpjWritebackServiceTask.cs) |
 | 5b | Konklusjon (grønt/rødt) → SVV via Altinn Events | ⚠️ Datamodell verifisert (`ForerKonklusjonModel`), selve Events-abonnementet hos SVV er ikke avtalt | [BESLUTNINGER.md C-3](BESLUTNINGER.md) |
 | — | Helsenorge EksternAPI (Oppgave/Skjema) | ✅ **Ende-til-ende verifisert 2026-09-18/21** for `Communication`- og `Questionnaire`-oppgave, samt kopi-tilbake til innbygger (`DocumentReference`, eget API). Gjenstår: `Bundle`-varianten, HTTPS-nåbart skjema (localtest er ren HTTP), og sømløst OIDC-uthopp | [IMPLEMENTERING.md §14.1](IMPLEMENTERING.md), [RISIKOREGISTER.md R9](RISIKOREGISTER.md), [PASIENTFLYT.md](PASIENTFLYT.md) |
 
 **Lesbar oppsummering:** Den *midtre* delen av flyten (steg 2–4, lege ↔ Altinn-app) er den best verifiserte delen av hele PoC-en. Det som skjer *før* (pasientens egenerklæring) og *etter* (writeback til EPJ, faktisk mottak hos SVV) konsultasjonen er i stor grad arkitektur og datamodeller — ikke virkende integrasjoner.
+
+---
+
+## nav-epj og veien mot TT02 (2026-11-08)
+
+Appen er koblet til NAVs test-EPJ [`navikt/nav-epj`](https://github.com/navikt/nav-epj), som bruker norske identifikatorer og testdata. Oppsett og testscenarioer står i [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md). Analysen fra august, [NAV-EPJ-TESTMILJO.md](NAV-EPJ-TESTMILJO.md), er utdatert. [smart-launch-nav-epj.svg](smart-launch-nav-epj.svg) viser flyten steg for steg.
+
+### Hva som er endret i nav-epj siden august
+
+- Feilene og patchen fra august gjelder ikke lenger. Patchen lar seg ikke anvende, og koden er rettet oppstrøms.
+- En launch må starte fra nav-epj sitt eget grensesnitt eller API, med en valgt pasient og en aktiv konsultasjon. Launchen er bundet til behandleren og legekontoret.
+- NAV har en åpen, driftet instans på `https://epj.ekstern.dev.nav.no`. SMART- og FHIR-endepunktene krever ikke NAV-innlogging, og brukerne logger inn med HelseID-testbehandlere. NAV registrerer hver klient manuelt, og det krever en utrulling hos dem.
+
+### Endringer i appen
+
+Endringene ligger i `SmartFhir.Common` og gjelder begge appene.
+
+| Endring | Hvorfor |
+|---|---|
+| fhirUser leses fra id_token, som valideres mot EPJ-ens `jwks_uri`, utsteder, `client_id` og levetid | nav-epj gir fhirUser bare i id_token. Uten dette ble lege og legekontor ikke fylt ut |
+| `iss` brukes som FHIR-adresse. `FhirBaseUrlOverride` gjelder bare for utstedere i den nye `FhirBaseUrlOverrideIssuers` | Overstyringen ble brukt for alle http-utstedere, også en lokal nav-epj, og prefill gikk til vår egen HAPI-mock |
+| `state` lages som URL-sikker base64 | nav-epj URL-koder ikke `state` i callback-redirecten. En `+` ble til mellomrom og ga «State mismatch» omtrent annenhver gang |
+
+### Verifisert lokalt
+
+| Scenario | Resultat |
+|---|---|
+| Forhåndsutfylling for GLAD FJORD | ✅ Pasient, lege (GRØNN VITS, HPR 565501872), legekontor, konsultasjon og diagnose fylt ut |
+| Bytte til TRYGG FJORD | ✅ Nytt skjema med riktig pasient |
+| Gjenbrukt launch-lenke | ✅ Avvist med «Authorization error: invalid_request» |
+| Feil klienthemmelighet | ✅ «Token exchange failed» |
+| Innsending | ✅ PDF og kvittering 2026-11-09. Krevde at PDF-containeren på testmaskinen stolte på maskinens TLS-proxy, ingen endring i appen |
+
+### Funn
+
+- nav-epj godtar http-adresser for klienter bare på `localhost` og `127.0.0.1`. Localtest finner appen bare på `local.altinn.cloud`, så nav-epj må endres lokalt på én linje. Et forslag til NAV er å godta adresser som peker til loopback.
+- nav-epj sitt `state`-problem bør meldes til NAV, selv om appen nå tåler det.
+- `/smart/test-writeback` er skrevet for Epic og gir `HTTP 400` mot nav-epj. Den automatiske skrivingen etter innsending bruker nav-epj sitt format.
+- nav-epj tok ikke imot PDF-er, lot ikke systemtokens opprette journalnotater, og kunne overskrive et dokument fra en app når legen lagret journalnotatet. Alt er rettet i grenen `forer-legeerklaering` i [nkylsta-bot/nav-epj](https://github.com/nkylsta-bot/nav-epj/tree/forer-legeerklaering), men ikke sendt til NAV.
+- Oppgraderingen til Altinn app v9 ga komponent-ID-er med understrek, som v9-frontenden avviser. Rettet.
+- Skjemaet merker diagnosekoden som ICD-10, men nav-epj sender ICPC-2-koder, for eksempel T86.
+- nav-epj sin frontend henter NAVs designsystem fra GitHub Packages og krever et GitHub-token med `read:packages`.
+
+### Hva som gjenstår før TT02
+
+| # | Tiltak | Hvorfor |
+|---|---|---|
+| 1 | Eget Altinn Studio-repo under `digdir`, med appen i `App/` på roten og en Dockerfile. `SmartFhir.Common` kopieres inn eller publiseres som NuGet-pakke | TT02-utrulling går gjennom Altinn Studio, som bygger repoet fra roten. Dette repoet har appen under `src/App` og en prosjektreferanse utenfor den |
+| 2 | Akseptere dobbel innlogging i første omgang: HelseID hos nav-epj, deretter ID-porten i Altinn med en TT02-testbruker | Callbacken lager Altinn-sesjonen med en snarvei som bare finnes i localtest (R10). Én innlogging er fase 1 i [VEIKART.md](VEIKART.md) |
+| 3 | Flytte SMART-tilstand og token fra serverminnet til en kryptert informasjonskapsel, eller kjøre én replika i demoen | TT02 kjører flere replikaer, og sesjonen ligger i minnet på én pod (R11). Altinn-apper deler nøklene for databeskyttelse |
+| 4 | Sette `SmartOnFhir:AllowedIssuerList` til `https://epj.ekstern.dev.nav.no/fhir` i TT02-innstillingene, og lese klienthemmelighet eller privatnøkkel fra Azure Key Vault | Utenfor Development avvises alle launcher når listen er tom. Privatnøkkelen leses i dag fra en filsti |
+| 5 | Be NAV registrere klienten med TT02-adressene på `digdir.apps.tt02.altinn.no`, launch-modus `tab` og samme scopes som lokalt | Klienter registreres manuelt av NAV. `tab` trengs fordi informasjonskapsler og Altinn-innloggingen ikke virker i nav-epj sin iframe |
+| 6 | Bekrefte at TT02-appen når `epj.ekstern.dev.nav.no` | Token-utvekslingen og FHIR-kallene går fra appens server. Ikke verifisert |
+| 7 | Legge appens Backend Services-nøkkel i Azure Key Vault som `SmartOnFhir:Backend:PrivateKeyJwk`, og registrere systemklienten med `jwksUri` på TT02-adressen | Skrivingen tilbake bruker en egen systemklient. Lokalt lages nøkkelen automatisk |
+| 8 | Få NAV til å ta inn endringene fra vår fork av nav-epj, eller kjøre forken selv | Den driftede nav-epj tar ikke imot PDF-er, og lar ikke systemtokens opprette journalnotater |
+
+Et mellomsteg før TT02: be NAV om også å registrere en `local.altinn.cloud`-adresse. Redirecten skjer i nettleseren, så den lokale appen kan da bruke den driftede nav-epj, med ekte HelseID-innlogging og NAVs testdata.
 
 ---
 
@@ -139,6 +198,8 @@ Pasient (Helsenorge.no)      EPJ (fastlege)         Altinn Studio-app (BFF)     
 ## Hvordan spinne opp hele miljøet lokalt
 
 Bekreftet fungerende 2026-08-11 (se README.md for fullstendige steg). Fire prosesser må kjøre samtidig:
+
+> For en launch fra NAVs `nav-epj` i stedet for repoets egen mock, se [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md).
 
 | Komponent | Port | Kommando |
 |---|---|---|
@@ -4992,9 +5053,160 @@ Det denne testrunden **ikke** beviser:
 
 ---
 
-# 18. nav-epj som lokalt SMART on FHIR-testmiljo
+# 18. Kjør appen lokalt med nav-epj
+
+# Kjør appen lokalt med nav-epj
+
+Denne guiden setter opp hele kjeden på din egen maskin: NAVs test-EPJ [`navikt/nav-epj`](https://github.com/navikt/nav-epj) starter appen med SMART EHR Launch, og appen forhåndsutfyller legeerklæringen fra nav-epj sitt FHIR-API.
+
+Guiden erstatter [NAV-EPJ-TESTMILJO.md](NAV-EPJ-TESTMILJO.md), som beskriver nav-epj slik den var i august 2026.
+
+## Slik henger det sammen
+
+| Del | Adresse |
+|---|---|
+| Altinn localtest og appen | `http://local.altinn.cloud:8000/digdir/forer-legeerklaering` |
+| nav-epj backend, med SMART og FHIR | `http://localhost:8080` |
+| nav-epj frontend, selve EPJ-et | `http://localhost:5173` |
+
+Legen åpner appen fra nav-epj. nav-epj sender nettleseren til appens `/smart/launch`. Appen henter token og FHIR-data på serversiden og åpner skjemaet ferdig utfylt.
+
+[![Sekvensdiagram for SMART EHR Launch fra nav-epj](smart-launch-nav-epj.svg)](smart-launch-nav-epj.svg)
+
+Diagrammet viser hele flyten, og hvordan appen får vite hvilken pasient og konsultasjon den ble startet fra.
+
+## Forutsetninger
+
+- .NET 11 SDK. Appen bruker Altinn app v9.
+- [studioctl](https://docs.altinn.studio/) (Altinn Studio CLI)
+- Podman eller Docker, med Compose
+- Java 25
+- Node 22 eller nyere, med `corepack enable`
+
+Ikke kjør repoets gamle `smart-mock` eller HAPI FHIR-serveren samtidig. HAPI bruker port 8080, som nav-epj trenger.
+
+## 1. Start Altinn localtest
+
+```bash
+studioctl env hosts add   # én gang, legger til local.altinn.cloud i hosts-filen
+studioctl env up
+```
+
+Localtest svarer på `http://local.altinn.cloud:8000`. Får du en annen port, må du endre porten i klientregistreringene i nav-epj sin `src/main/resources/application-local.yaml`.
+
+## 2. Klon nav-epj
+
+Bruk grenen `forer-legeerklaering` i vår fork av nav-epj:
+
+```bash
+git clone -b forer-legeerklaering https://github.com/nkylsta-bot/nav-epj.git
+cd nav-epj
+```
+
+Grenen er NAVs nav-epj med tre tillegg:
+
+- **Appen er registrert som SMART-klient**, både for launch fra EPJ-et og som systemklient for skrivingen tilbake. Registreringene står også i [`local-dev/nav-epj-testing/forer-legeerklaering-client.yaml`](../local-dev/nav-epj-testing/forer-legeerklaering-client.yaml).
+- **`local.altinn.cloud` er tillatt over http.** nav-epj godtar ellers http bare for `localhost` og `127.0.0.1`, og localtest finner appen bare på `local.altinn.cloud`.
+- **nav-epj tar imot PDF-er fra SMART-apper.** De vises under «Dokumenter fra apper» i journalen.
+
+Frontenden henter også NAVs designsystem fra det åpne npm-registeret, så du trenger ikke et GitHub-token.
+
+## 3. Start nav-epj
+
+Start databasene, og deretter backend i ett terminalvindu:
+
+```bash
+docker compose up -d
+./gradlew runLocal        # Windows: .\gradlew.bat runLocal
+```
+
+Backend er klar når `http://localhost:8080/fhir/.well-known/smart-configuration` svarer. Lokalt er du alltid logget inn som legen GRØNN VITS, HPR-nummer 565501872, ved Fjordvik Legekontor.
+
+Start frontend i et annet terminalvindu:
+
+```bash
+cd frontend
+yarn
+yarn dev
+```
+
+All testdata slettes og legges inn på nytt hver gang backend starter.
+
+## 4. Start appen
+
+Gå tilbake til din klone av `forer-legeerklaering` i et nytt terminalvindu. Kommandoene under kjøres derfra, ikke fra nav-epj.
+
+```bash
+cd src/App
+dotnet user-secrets set "SmartOnFhir:ClientSecret" "local-dev-secret"   # én gang
+studioctl run
+```
+
+Hemmeligheten må være den samme som `clientSecret` i klientregistreringen fra steg 2.
+
+## 5. Åpne appen fra nav-epj
+
+1. Gå til `http://localhost:5173`.
+2. Velg en pasient, for eksempel GLAD FJORD, og start en konsultasjon.
+3. Åpne «Legeerklæring førerrett» fra applistene. Appen åpnes i en ny fane.
+
+Skjemaet åpnes med pasient, lege, legekontor, konsultasjon og diagnose fylt ut.
+
+**Uten frontend** kan du starte en launch direkte mot API-et. Det er nyttig hvis du ikke har et GitHub-token:
+
+```bash
+B=http://localhost:8080
+P=$(curl -s $B/api/patient | jq -r '.[] | select(.givenName=="GLAD") | .id')
+curl -s -X PUT $B/api/active-patient -H 'Content-Type: application/json' -d "{\"patientId\":\"$P\"}"
+curl -s -X POST $B/api/patients/$P/consultations > /dev/null
+curl -s -X POST $B/api/launch -H 'Content-Type: application/json' \
+  -d "{\"appId\":\"forer-legeerklaering-poc\",\"patientId\":\"$P\"}" | jq -r .launchUrl
+```
+
+I PowerShell:
+
+```powershell
+$B = "http://localhost:8080"
+$P = ((Invoke-RestMethod "$B/api/patient") | Where-Object givenName -eq "GLAD").id
+Invoke-RestMethod -Method Put "$B/api/active-patient" -ContentType "application/json" -Body (@{ patientId = $P } | ConvertTo-Json) | Out-Null
+Invoke-RestMethod -Method Post "$B/api/patients/$P/consultations" | Out-Null
+(Invoke-RestMethod -Method Post "$B/api/launch" -ContentType "application/json" -Body (@{ appId = "forer-legeerklaering-poc"; patientId = $P } | ConvertTo-Json)).launchUrl
+```
+
+Åpne lenken som skrives ut, i nettleseren. Hver lenke virker én gang.
+
+## Testscenarioer
+
+| # | Scenario | Slik gjør du det | Forventet resultat |
+|---|---|---|---|
+| 1 | Forhåndsutfylling | Åpne appen for GLAD FJORD som i steg 5. | Fødselsnummer 30898110431, navn, fødselsdato og kjønn er fylt ut. Legen er GRØNN VITS med HPR-nummer 565501872, og legekontoret er Fjordvik Legekontor med organisasjonsnummer 311111116. Konsultasjonsdato og diagnose er også fylt ut. |
+| 2 | Bytte pasient | Velg TRYGG FJORD i nav-epj, start en konsultasjon og åpne appen på nytt. | Et nytt skjema åpnes med TRYGG FJORD, fødselsnummer 02867910193. |
+| 3 | Gjenbrukt launch | Åpne den samme launch-lenken en gang til, for eksempel fra nettleserhistorikken. | nav-epj avviser den, og appen viser «Authorization error: invalid_request». |
+| 4 | Feil klienthemmelighet | Sett en annen verdi for `SmartOnFhir:ClientSecret`, start appen på nytt og åpne den fra nav-epj. | Appen viser «Token exchange failed». Sett tilbake `local-dev-secret` etterpå. |
+| 5 | Sende inn | I skjemaet fra scenario 1 velger du en kjøretøygruppe, svarer «Ja, pasienten er skikket» og trykker «Send inn legeerklæring». | Innsendingen fullføres med PDF og kvittering. |
+| 6 | Skrive tilbake til journalen | Gå tilbake til journalen til pasienten i nav-epj etter scenario 5. | Under journalnotatet står «Dokumenter fra apper» med «Legeerklæring førerrett.pdf» og et kort notat med referanse og vurdering. Lenken åpner den samme PDF-en som i Altinn. Legens eget journalnotat er uendret. |
+| 7 | Journalnotatet etter skriving tilbake | Endre legens journalnotat etter scenario 6 og trykk «Lagre». | Legens notat lagres. Dokumentet fra appen er uendret. |
+
+## Når noe går galt
+
+| Symptom | Årsak |
+|---|---|
+| nav-epj starter ikke og klager på «insecure redirectUri» | Du kjører NAVs nav-epj, ikke grenen fra steg 2. |
+| nav-epj sin frontend viser «Du er logget inn med HelseID, men nav-epj svarte ikke» | Frontenden når ikke backend. Åpne `http://localhost:8080/api/practitioners/me`. Den skal vise legen GRØNN VITS. Får du ikke svar, er backend ikke startet: se etter feil i terminalen der `gradlew runLocal` kjører. Får du en annen side, bruker noe annet port 8080, typisk HAPI FHIR-containeren fra repoets gamle oppsett. Stopp den og start backend på nytt. |
+| Backend svarer på `localhost:8080`, men frontenden viser fortsatt feilen | Se i terminalen der `yarn dev` kjører. Står det `ECONNREFUSED ::1:8080`, slår `localhost` opp til IPv6. Endre alle tre `target`-verdiene i `frontend/vite.config.js` i nav-epj fra `http://localhost:8080` til `http://127.0.0.1:8080`, og start `yarn dev` på nytt. |
+| Appen står ikke i applistene i nav-epj | Du kjører NAVs nav-epj, ikke grenen fra steg 2. |
+| Innsendingen stopper med «Noe gikk galt» etter kvitteringssiden har begynt å laste | Skrivingen tilbake til EPJ-et feilet. Se etter «EPJ write-back» i appens logg med `studioctl app logs`. «Token request failed» betyr at nav-epj ikke fikk hentet appens nøkkel fra `/smart/jwks.json`: sjekk at appen kjører. |
+| Lege og legekontor er tomme, men pasienten er fylt ut | Appen fikk ikke validert id_token. Se etter «id_token» i appens logg med `studioctl app logs`. |
+| `/smart/test-writeback` gir HTTP 400 | nav-epj godtar bare sitt eget notatformat for DocumentReference. Testen er skrevet for Epic. |
+
+
+---
+
+# 19. nav-epj som lokalt SMART on FHIR-testmiljo
 
 # nav-epj som lokalt SMART on FHIR-testmiljø
+
+> **Utdatert (2026-11-08).** Dette dokumentet beskriver nav-epj slik den var i august 2026. Feilene og patchen under gjelder ikke lenger. Se [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md) for dagens oppsett.
 
 **Status (2026-08-20): verifisert lokalt.** Full SMART EHR Launch-kjede (launch → authorize → token-exchange) kjørt ende-til-ende mot vår faktiske app, `forer-legeerklaering`, med en lokalt patchet klone av [`navikt/nav-epj`](https://github.com/navikt/nav-epj). Dette dokumentet samler alt en annen person trenger for å reprodusere oppsettet selv — inkludert seks reelle bugs som måtte rettes lokalt for at det skulle fungere i det hele tatt.
 
@@ -5215,7 +5427,7 @@ Dette er den enkleste måten å demonstrere at hele flyten fungerer for en perso
 
 ---
 
-# 19. Epic on FHIR som testmiljo (Helseplattformen)
+# 20. Epic on FHIR som testmiljo (Helseplattformen)
 
 # Epic on FHIR som testmiljø — relevant fordi Helseplattformen kjører Epic
 

@@ -1,5 +1,7 @@
 # nav-epj som lokalt SMART on FHIR-testmiljø
 
+> **Utdatert (2026-11-08).** Dette dokumentet beskriver nav-epj slik den var i august 2026. Feilene og patchen under gjelder ikke lenger. Se [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md) for dagens oppsett.
+
 **Status (2026-08-20): verifisert lokalt.** Full SMART EHR Launch-kjede (launch → authorize → token-exchange) kjørt ende-til-ende mot vår faktiske app, `forer-legeerklaering`, med en lokalt patchet klone av [`navikt/nav-epj`](https://github.com/navikt/nav-epj). Dette dokumentet samler alt en annen person trenger for å reprodusere oppsettet selv — inkludert seks reelle bugs som måtte rettes lokalt for at det skulle fungere i det hele tatt.
 
 ## Innhold

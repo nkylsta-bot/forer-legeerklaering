@@ -1,0 +1,35 @@
+    # Klientregistreringene i smart.clients i nav-epj sin src/main/resources/application-local.yaml.
+    # De er allerede lagt inn i grenen forer-legeerklaering i nkylsta-bot/nav-epj.
+    # Se docs/LOKALT-MED-NAV-EPJ.md.
+    - clientId: "forer-legeerklaering-poc"
+      name: "Legeerklæring førerrett"
+      description: "Helseattest førerett (IS-2569) i Altinn, forhåndsutfylt fra EPJ."
+      launchMode: "tab"
+      redirectUris: [ "http://local.altinn.cloud:8000/digdir/forer-legeerklaering/smart/callback" ]
+      launchUris: [ "http://local.altinn.cloud:8000/digdir/forer-legeerklaering/smart/launch" ]
+      tokenEndpointAuthMethod: "client_secret_basic"
+      clientSecret: "local-dev-secret"
+      scopes:
+        - openid
+        - profile
+        - fhirUser
+        - launch
+        - launch/patient
+        - launch/encounter
+        - offline_access
+        - patient/Patient.rs
+        - patient/Encounter.rs
+        - patient/Condition.rs
+        - patient/DocumentReference.c
+        - user/Practitioner.rs
+        - user/PractitionerRole.rs
+        - user/Organization.rs
+    # Systemklienten appen bruker for å skrive PDF-en tilbake til journalen etter innsending
+    # (SMART Backend Services). Appen publiserer den offentlige nøkkelen sin på jwksUri.
+    - clientId: "forer-legeerklaering-backend"
+      name: "Legeerklæring førerrett (system)"
+      tokenEndpointAuthMethod: "private_key_jwt"
+      jwksUri: "http://local.altinn.cloud:8000/digdir/forer-legeerklaering/smart/jwks.json"
+      grantTypes: [ "client_credentials" ]
+      scopes:
+        - system/DocumentReference.crs
