@@ -1,0 +1,312 @@
+{
+  "$schema": "https://altinn.studio/designer/app-dist/9.0.0-preview.10/schemas/json/layout/layout.schema.v1.json",
+  "data": {
+    "layout": [
+      {
+        "id": "heading-sykdom",
+        "type": "Heading",
+        "size": "L",
+        "textResourceBindings": {
+          "title": "heading.sykdom"
+        }
+      },
+      {
+        "id": "epj-diagnosekode",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Epj_DiagnoseKode"
+        },
+        "readOnly": true,
+        "hidden": [
+          "equals",
+          [
+            "dataModel",
+            "Epj_DiagnoseKode"
+          ],
+          null
+        ],
+        "textResourceBindings": {
+          "title": "field.Epj_DiagnoseKode"
+        }
+      },
+      {
+        "id": "epj-diagnosetekst",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Epj_DiagnoseTekst"
+        },
+        "readOnly": true,
+        "hidden": [
+          "equals",
+          [
+            "dataModel",
+            "Epj_DiagnoseTekst"
+          ],
+          null
+        ],
+        "textResourceBindings": {
+          "title": "field.Epj_DiagnoseTekst"
+        }
+      },
+      {
+        "id": "sykdom",
+        "type": "Dropdown",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom"
+        },
+        "required": true,
+        "optionsId": "sykdommer",
+        "textResourceBindings": {
+          "title": "field.Sykdom",
+          "description": "field.Sykdom.description"
+        }
+      },
+      {
+        "id": "sykdom-innlagt",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Innlagt"
+        },
+        "optionsId": "jaNeiUkjent",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Sykdom_Innlagt"
+        }
+      },
+      {
+        "id": "sykdom-innlagttype",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_InnlagtType"
+        },
+        "optionsId": "innlagtType",
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom_Innlagt"
+          ],
+          "ja"
+        ],
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Sykdom_InnlagtType"
+        }
+      },
+      {
+        "id": "sykdom-innlagtdato",
+        "type": "Datepicker",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_InnlagtDato"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom_Innlagt"
+          ],
+          "ja"
+        ],
+        "textResourceBindings": {
+          "title": "field.Sykdom_InnlagtDato"
+        },
+        "timeStamp": false
+      },
+      {
+        "id": "sykdom-institusjon",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Institusjon"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom_Innlagt"
+          ],
+          "ja"
+        ],
+        "textResourceBindings": {
+          "title": "field.Sykdom_Institusjon"
+        }
+      },
+      {
+        "id": "sykdom-baerertilstand",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Baerertilstand"
+        },
+        "optionsId": "jaNeiUkjent",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Sykdom_Baerertilstand"
+        }
+      },
+      {
+        "id": "sykdom-innsykningsdato",
+        "type": "Datepicker",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Innsykningsdato"
+        },
+        "textResourceBindings": {
+          "title": "field.Sykdom_Innsykningsdato"
+        },
+        "timeStamp": false
+      },
+      {
+        "id": "sykdom-provetakingsdato",
+        "type": "Datepicker",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Provetakingsdato"
+        },
+        "textResourceBindings": {
+          "title": "field.Sykdom_Provetakingsdato"
+        },
+        "timeStamp": false
+      },
+      {
+        "id": "sykdom-antattsmittetidspunkt",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_AntattSmittetidspunkt"
+        },
+        "textResourceBindings": {
+          "title": "field.Sykdom_AntattSmittetidspunkt"
+        }
+      },
+      {
+        "id": "sykdom-laboratorium",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Laboratorium"
+        },
+        "textResourceBindings": {
+          "title": "field.Sykdom_Laboratorium"
+        }
+      },
+      {
+        "id": "sykdom-indikasjon",
+        "type": "Checkboxes",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Indikasjon"
+        },
+        "optionsId": "indikasjoner",
+        "textResourceBindings": {
+          "title": "field.Sykdom_Indikasjon"
+        }
+      },
+      {
+        "id": "sykdom-indikasjonannet",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_IndikasjonAnnet"
+        },
+        "hidden": [
+          "not",
+          [
+            "commaContains",
+            [
+              "dataModel",
+              "Sykdom_Indikasjon"
+            ],
+            "annet"
+          ]
+        ],
+        "textResourceBindings": {
+          "title": "field.Sykdom_IndikasjonAnnet"
+        }
+      },
+      {
+        "id": "sykdom-sykdomsbilde",
+        "type": "TextArea",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Sykdomsbilde"
+        },
+        "textResourceBindings": {
+          "title": "field.Sykdom_Sykdomsbilde"
+        }
+      },
+      {
+        "id": "sykdom-klinisksepsis",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_KliniskSepsis"
+        },
+        "optionsId": "jaNei",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Sykdom_KliniskSepsis"
+        }
+      },
+      {
+        "id": "sykdom-utfall",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Utfall"
+        },
+        "optionsId": "utfall",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Sykdom_Utfall"
+        }
+      },
+      {
+        "id": "sykdom-dodsdato",
+        "type": "Datepicker",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Dodsdato"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom_Utfall"
+          ],
+          "dod"
+        ],
+        "textResourceBindings": {
+          "title": "field.Sykdom_Dodsdato"
+        },
+        "timeStamp": false
+      },
+      {
+        "id": "sykdom-folgetilstand",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_Folgetilstand"
+        },
+        "textResourceBindings": {
+          "title": "field.Sykdom_Folgetilstand"
+        }
+      },
+      {
+        "id": "sykdom-folgetilstanddato",
+        "type": "Datepicker",
+        "dataModelBindings": {
+          "simpleBinding": "Sykdom_FolgetilstandDato"
+        },
+        "hidden": [
+          "equals",
+          [
+            "dataModel",
+            "Sykdom_Folgetilstand"
+          ],
+          null
+        ],
+        "textResourceBindings": {
+          "title": "field.Sykdom_FolgetilstandDato"
+        },
+        "timeStamp": false
+      },
+      {
+        "id": "nav-sykdom",
+        "type": "NavigationButtons",
+        "showBackButton": true,
+        "textResourceBindings": {
+          "next": "nav.next",
+          "back": "nav.back"
+        }
+      }
+    ]
+  }
+}

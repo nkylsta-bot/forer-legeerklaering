@@ -1,0 +1,14 @@
+[
+  {
+    "value": "ja",
+    "label": "Ja"
+  },
+  {
+    "value": "nei",
+    "label": "Nei"
+  },
+  {
+    "value": "ukjent",
+    "label": "Ukjent"
+  }
+]

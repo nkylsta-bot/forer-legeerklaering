@@ -1,0 +1,30 @@
+[
+  {
+    "value": "for-innvandring",
+    "label": "Smittet før innvandring til Norge"
+  },
+  {
+    "value": "turist",
+    "label": "Turistreise"
+  },
+  {
+    "value": "forretning",
+    "label": "Forretningsreise"
+  },
+  {
+    "value": "besok-hjemland",
+    "label": "Besøk i eget eller foreldres tidligere hjemland"
+  },
+  {
+    "value": "arbeid-studie",
+    "label": "Arbeid/studie/langtidsopphold"
+  },
+  {
+    "value": "annet",
+    "label": "Annet"
+  },
+  {
+    "value": "ukjent",
+    "label": "Ukjent"
+  }
+]

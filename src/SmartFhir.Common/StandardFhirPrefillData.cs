@@ -20,6 +20,7 @@ namespace SmartFhir.Common
     {
         // --- Pasient (FHIR Patient) ---
         public string Pasient_Fnr { get; set; }
+        public string Pasient_Dnr { get; set; }
         public string Pasient_Fornavn { get; set; }
         public string Pasient_Etternavn { get; set; }
         public string Pasient_Fodselsdato { get; set; }
@@ -49,5 +50,10 @@ namespace SmartFhir.Common
         // --- Diagnose (FHIR Condition) — ikke relevant for alle caser, se klassekommentar ---
         public string Diagnose_Kode { get; set; }
         public string Diagnose_Tekst { get; set; }
+
+        // Første diagnose på konsultasjonen som er kodet i ICD-10. EPJ-et kan sende flere diagnoser,
+        // og den første er ofte ICPC-2. Skjemaer som trenger ICD-10, som MSIS-meldingen, bruker disse.
+        public string Diagnose_Icd10Kode { get; set; }
+        public string Diagnose_Icd10Tekst { get; set; }
     }
 }

@@ -1,0 +1,210 @@
+{
+  "$schema": "https://altinn.studio/designer/app-dist/9.0.0-preview.10/schemas/json/layout/layout.schema.v1.json",
+  "data": {
+    "layout": [
+      {
+        "id": "heading-pasient",
+        "type": "Heading",
+        "size": "L",
+        "textResourceBindings": {
+          "title": "heading.pasient"
+        }
+      },
+      {
+        "id": "paragraph-pasient-ingress",
+        "type": "Paragraph",
+        "textResourceBindings": {
+          "title": "paragraph.pasient-ingress"
+        }
+      },
+      {
+        "id": "pasient-etternavn",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Etternavn"
+        },
+        "readOnly": true,
+        "textResourceBindings": {
+          "title": "field.Pasient_Etternavn"
+        }
+      },
+      {
+        "id": "pasient-fornavn",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Fornavn"
+        },
+        "readOnly": true,
+        "textResourceBindings": {
+          "title": "field.Pasient_Fornavn"
+        }
+      },
+      {
+        "id": "pasient-fnr",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Fnr"
+        },
+        "readOnly": true,
+        "hidden": [
+          "equals",
+          [
+            "dataModel",
+            "Pasient_Fnr"
+          ],
+          null
+        ],
+        "textResourceBindings": {
+          "title": "field.Pasient_Fnr"
+        }
+      },
+      {
+        "id": "pasient-dnr",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Dnr"
+        },
+        "readOnly": true,
+        "hidden": [
+          "equals",
+          [
+            "dataModel",
+            "Pasient_Dnr"
+          ],
+          null
+        ],
+        "textResourceBindings": {
+          "title": "field.Pasient_Dnr"
+        }
+      },
+      {
+        "id": "pasient-kjonn",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Kjonn"
+        },
+        "required": true,
+        "optionsId": "kjonn",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Pasient_Kjonn"
+        }
+      },
+      {
+        "id": "pasient-telefon",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Telefon"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_Telefon"
+        }
+      },
+      {
+        "id": "pasient-fastlege",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Fastlege"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_Fastlege"
+        }
+      },
+      {
+        "id": "pasient-bokommune",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Bokommune"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_Bokommune"
+        }
+      },
+      {
+        "id": "pasient-fodeland",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_Fodeland"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_Fodeland"
+        }
+      },
+      {
+        "id": "pasient-morsfodeland",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_MorsFodeland"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_MorsFodeland"
+        }
+      },
+      {
+        "id": "pasient-farsfodeland",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_FarsFodeland"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_FarsFodeland"
+        }
+      },
+      {
+        "id": "heading-utenlandsfodte",
+        "type": "Heading",
+        "size": "M",
+        "textResourceBindings": {
+          "title": "heading.utenlandsfodte"
+        }
+      },
+      {
+        "id": "pasient-botidinorge",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_BotidINorge"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_BotidINorge"
+        }
+      },
+      {
+        "id": "pasient-aarsakopphold",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_AarsakOpphold"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_AarsakOpphold"
+        }
+      },
+      {
+        "id": "heading-relevant",
+        "type": "Heading",
+        "size": "M",
+        "textResourceBindings": {
+          "title": "heading.relevant"
+        }
+      },
+      {
+        "id": "pasient-yrkeinstitusjon",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Pasient_YrkeInstitusjon"
+        },
+        "textResourceBindings": {
+          "title": "field.Pasient_YrkeInstitusjon"
+        }
+      },
+      {
+        "id": "nav-pasient",
+        "type": "NavigationButtons",
+        "showBackButton": true,
+        "textResourceBindings": {
+          "next": "nav.next",
+          "back": "nav.back"
+        }
+      }
+    ]
+  }
+}

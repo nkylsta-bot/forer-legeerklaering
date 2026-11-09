@@ -1,0 +1,60 @@
+{
+  "$schema": "https://altinncdn.no/schemas/json/test-users/test-users.schema.v1.json",
+  "persons": [
+    {
+      "partyId": 514050,
+      "partyUuid": "39116a64-78bc-4fec-9771-c3bf09863575",
+      "ssn": "17858431093",
+      "firstName": "Gul",
+      "middleName": "",
+      "lastName": "Barnestol",
+      "customClaims": [],
+      "partyRoles": {
+        "514050": [
+          {
+            "type": "altinn",
+            "value": "priv"
+          }
+        ]
+      },
+      "addressCity": "Oslo",
+      "addressHouseLetter": null,
+      "addressHouseNumber": "12",
+      "addressMunicipalName": "Oslo",
+      "addressMunicipalNumber": "0301",
+      "addressPostalCode": "0550",
+      "addressStreetName": "Testveien",
+      "mailingAddress": "Testveien 12 0550 Oslo",
+      "mailingPostalCity": "Oslo",
+      "mailingPostalCode": "0550",
+      "mobileNumber": "90000002",
+      "telephoneNumber": "",
+      "email": "gul.barnestol@example.com",
+      "userId": 14050,
+      "language": "nb",
+      "userName": "GulBarnestol"
+    }
+  ],
+  "orgs": [
+    {
+      "partyId": 500006,
+      "partyUuid": "00000000-0000-0000-0000-000000500006",
+      "orgNumber": "991825827",
+      "parentPartyId": null,
+      "name": "Digitaliseringsdirektoratet",
+      "businessAddress": "Lørenfaret 1C",
+      "businessPostalCity": "Oslo",
+      "businessPostalCode": "0580",
+      "eMailAddress": "postmottak@digdir.no",
+      "faxNumber": "",
+      "internetAddress": "https://digdir.no",
+      "mailingAddress": "Postboks 1382 Vika",
+      "mailingPostalCity": "Oslo",
+      "mailingPostalCode": "0114",
+      "mobileNumber": "",
+      "telephoneNumber": "",
+      "unitStatus": null,
+      "unitType": "STAT"
+    }
+  ]
+}

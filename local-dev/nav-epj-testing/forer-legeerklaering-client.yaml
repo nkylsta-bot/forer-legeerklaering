@@ -33,3 +33,34 @@
       grantTypes: [ "client_credentials" ]
       scopes:
         - system/DocumentReference.crs
+    # MSIS-meldingen (src/msis-melding)
+    - clientId: "msis-melding-poc"
+      name: "MSIS-melding"
+      description: "Nominativ melding om smittsom sykdom til Folkehelseinstituttet."
+      launchMode: "tab"
+      redirectUris: [ "http://local.altinn.cloud:8000/digdir/msis-melding/smart/callback" ]
+      launchUris: [ "http://local.altinn.cloud:8000/digdir/msis-melding/smart/launch" ]
+      tokenEndpointAuthMethod: "client_secret_basic"
+      clientSecret: "local-dev-secret"
+      scopes:
+        - openid
+        - profile
+        - fhirUser
+        - launch
+        - launch/patient
+        - launch/encounter
+        - offline_access
+        - patient/Patient.rs
+        - patient/Encounter.rs
+        - patient/Condition.rs
+        - patient/DocumentReference.c
+        - user/Practitioner.rs
+        - user/PractitionerRole.rs
+        - user/Organization.rs
+    - clientId: "msis-melding-backend"
+      name: "MSIS-melding (system)"
+      tokenEndpointAuthMethod: "private_key_jwt"
+      jwksUri: "http://local.altinn.cloud:8000/digdir/msis-melding/smart/jwks.json"
+      grantTypes: [ "client_credentials" ]
+      scopes:
+        - system/DocumentReference.crs

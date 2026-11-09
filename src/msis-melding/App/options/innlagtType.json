@@ -1,0 +1,14 @@
+[
+  {
+    "value": "sykehus",
+    "label": "Sykehus"
+  },
+  {
+    "value": "sykehjem",
+    "label": "Sykehjem"
+  },
+  {
+    "value": "annet",
+    "label": "Annet"
+  }
+]

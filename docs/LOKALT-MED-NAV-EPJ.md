@@ -87,6 +87,18 @@ studioctl run
 
 Hemmeligheten må være den samme som `clientSecret` i klientregistreringen fra steg 2.
 
+**MSIS-meldingen** er en egen app i `src/msis-melding`. Den kan kjøre samtidig med legeerklæringen:
+
+```bash
+cd src/msis-melding
+(cd App && dotnet user-secrets set "SmartOnFhir:ClientSecret" "local-dev-secret")   # én gang
+studioctl run
+```
+
+Kjør `studioctl` fra `src/msis-melding`, ikke fra `src/msis-melding/App`. `studioctl` leter etter en mappe som heter `App`, og fra feil mappe finner den `src/App` i stedet.
+
+Begge appene logger inn som testlegen Gul Barnestol. Når alle appene som kjører, har egne testdata, bruker localtest bare dem og ikke de innebygde testbrukerne.
+
 ## 5. Åpne appen fra nav-epj
 
 1. Gå til `http://localhost:5173`.
@@ -130,6 +142,26 @@ Invoke-RestMethod -Method Post "$B/api/patients/$P/consultations" | Out-Null
 | 6 | Skrive tilbake til journalen | Gå tilbake til journalen til pasienten i nav-epj etter scenario 5. | Under journalnotatet står «Dokumenter fra apper» med «Legeerklæring førerrett.pdf» og et kort notat med referanse og vurdering. Lenken åpner den samme PDF-en som i Altinn. Legens eget journalnotat er uendret. |
 | 7 | Journalnotatet etter skriving tilbake | Endre legens journalnotat etter scenario 6 og trykk «Lagre». | Legens notat lagres. Dokumentet fra appen er uendret. |
 
+### MSIS-meldingen
+
+De innebygde konsultasjonene i nav-epj har bare ICPC-2-diagnoser. Gi først konsultasjonen en ICD-10-diagnose, for eksempel A37.0 kikhoste, i journalen i nav-epj. Uten frontend:
+
+```bash
+B=http://localhost:8080
+P=$(curl -s $B/api/patient | jq -r '.[] | select(.givenName=="TRYGG") | .id')
+curl -s -X PUT $B/api/active-patient -H 'Content-Type: application/json' -d "{\"patientId\":\"$P\"}"
+C=$(curl -s -X POST $B/api/patients/$P/consultations | jq -r .id)
+curl -s -X PATCH $B/api/patients/$P/consultations -H 'Content-Type: application/json' \
+  -d "{\"consultationId\":\"$C\",\"diagnoses\":[{\"code\":\"A37.0\",\"system\":\"ICD10\"}],\"clinicalNote\":\"Kikhoste.\",\"finalize\":false}"
+```
+
+| # | Scenario | Slik gjør du det | Forventet resultat |
+|---|---|---|---|
+| M1 | Forhåndsutfylling | Åpne «MSIS-melding» fra nav-epj for TRYGG FJORD. | Navn og fødselsnummer er fylt ut, og kjønn er «Mann». På siden «Sykdom» står A37.0 som diagnose i journalen, og «Kikhoste» er valgt som meldingspliktig sykdom. På siden «Melder» står GRØNN VITS og Fjordvik Legekontor. |
+| M2 | Felt som vises etter svar | Svar «Ja» på «Innlagt helseinstitusjon?», og velg «Utlandet» som smittested. | Hvor pasienten er innlagt, dato og institusjon vises. Land, hjemkomstdato og årsak til utenlandsopphold vises. Seksjonene for covid-19, hiv og syfilis er skjult for kikhoste. |
+| M3 | Seksjon for én sykdom | Velg «Hiv-infeksjon» som sykdom og gå til siden «Smitte». | Seksjonen «Ved hiv» vises. |
+| M4 | Sende inn og lagre i journalen | Fyll inn telefonnummer på siden «Melder» og trykk «Send inn MSIS-melding». | Kvitteringen vises. I journalen i nav-epj står «MSIS-melding om smittsom sykdom.pdf» under «Dokumenter fra apper», med et notat om sykdommen og referansen. |
+
 ## Når noe går galt
 
 | Symptom | Årsak |
@@ -138,6 +170,8 @@ Invoke-RestMethod -Method Post "$B/api/patients/$P/consultations" | Out-Null
 | nav-epj sin frontend viser «Du er logget inn med HelseID, men nav-epj svarte ikke» | Frontenden når ikke backend. Åpne `http://localhost:8080/api/practitioners/me`. Den skal vise legen GRØNN VITS. Får du ikke svar, er backend ikke startet: se etter feil i terminalen der `gradlew runLocal` kjører. Får du en annen side, bruker noe annet port 8080, typisk HAPI FHIR-containeren fra repoets gamle oppsett. Stopp den og start backend på nytt. |
 | Backend svarer på `localhost:8080`, men frontenden viser fortsatt feilen | Se i terminalen der `yarn dev` kjører. Står det `ECONNREFUSED ::1:8080`, slår `localhost` opp til IPv6. Endre alle tre `target`-verdiene i `frontend/vite.config.js` i nav-epj fra `http://localhost:8080` til `http://127.0.0.1:8080`, og start `yarn dev` på nytt. |
 | Appen står ikke i applistene i nav-epj | Du kjører NAVs nav-epj, ikke grenen fra steg 2. |
+| nav-epj starter ikke og sier «Migration checksum mismatch for migration version 8» | Databasen er fra en eldre versjon av grenen, der vedlegg-migreringen hadde nummer 8. Testdataene legges inn på nytt ved hver oppstart, så slett databasen med `docker compose down -v` og `docker compose up -d` i nav-epj, og start backend igjen. |
+| Innsendingen henger på «Vent litt», og appens logg har 404 fra `register/api/v1/parties/lookup` | localtest bruker bare appenes testdata, og de mangler en organisasjon PDF-en trenger. Appenes `wwwroot/testData.json` skal inneholde Digitaliseringsdirektoratet (991825827). |
 | Innsendingen stopper med «Noe gikk galt» etter kvitteringssiden har begynt å laste | Skrivingen tilbake til EPJ-et feilet. Se etter «EPJ write-back» i appens logg med `studioctl app logs`. «Token request failed» betyr at nav-epj ikke fikk hentet appens nøkkel fra `/smart/jwks.json`: sjekk at appen kjører. |
 | Lege og legekontor er tomme, men pasienten er fylt ut | Appen fikk ikke validert id_token. Se etter «id_token» i appens logg med `studioctl app logs`. |
 | `/smart/test-writeback` gir HTTP 400 | nav-epj godtar bare sitt eget notatformat for DocumentReference. Testen er skrevet for Epic. |

@@ -1,0 +1,26 @@
+[
+  {
+    "value": "barnehage-skole",
+    "label": "Barnehage/skole"
+  },
+  {
+    "value": "privat-husstand",
+    "label": "Privat husstand"
+  },
+  {
+    "value": "helseinstitusjon",
+    "label": "Helseinstitusjon"
+  },
+  {
+    "value": "servering",
+    "label": "Serveringssted/bar/utested"
+  },
+  {
+    "value": "jobb-universitet",
+    "label": "Jobb/universitet"
+  },
+  {
+    "value": "ukjent",
+    "label": "Ukjent"
+  }
+]

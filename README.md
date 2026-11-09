@@ -64,6 +64,7 @@ Alle dokumentene under er også samlet i [DOKUMENTASJON-KOMPLETT.md](DOKUMENTASJ
 | [KRAVSPESIFIKASJON-v0.6.md](docs/KRAVSPESIFIKASJON-v0.6.md) | Krav, arkitektur, datamodell, SMART-krav, kodeverk, referanser |
 | [IMPLEMENTERING.md](docs/IMPLEMENTERING.md) | Komponentguide, beste praksis, fallgruver, referanser |
 | [SKJEMA-IS2569.md](docs/SKJEMA-IS2569.md) | Fullstendig feltstruktur for blankett IS-2569 (Helseattest førerett) med implementeringsstatus |
+| [SKJEMA-MSIS.md](docs/SKJEMA-MSIS.md) | Nytt case (2026-11-09): FHIs MSIS-melding om smittsom sykdom — sider, felt, forhåndsutfylling med forslag til sykdom fra ICD-10, og kopi i journalen. Implementert som `src/msis-melding` |
 | [SKJEMA-KJEVEORTOPEDISK.md](docs/SKJEMA-KJEVEORTOPEDISK.md) | Nytt case (2026-09-09): Helfo-blankett for henvisning til kjeveortopedisk vurdering — feltstruktur, datamodell, henviser er tannlege/tannpleier (ikke lege). Implementert som `src/AppKjeveortopedisk` |
 | [SMARTFHIR-COMMON.md](docs/SMARTFHIR-COMMON.md) | Delt SMART on FHIR-launch/-prefill-klassebibliotek (`src/SmartFhir.Common`) brukt av alle apper i repoet — hvorfor nå, hva som ble flyttet, forhold til VEIKART.md sin fremtidige `Digdir.SmartOnFhir`-pakke |
 | [PASIENTFLYT.md](docs/PASIENTFLYT.md) | Arkitekturforslag for digital egenerklæring (NA-0201) med Dialogporten og helsenorge.no — pasientens del av flyten |

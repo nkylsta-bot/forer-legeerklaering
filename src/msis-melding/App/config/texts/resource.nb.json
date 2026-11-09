@@ -1,0 +1,326 @@
+{
+  "$schema": "https://altinn.studio/designer/app-dist/9.0.0-preview.10/schemas/json/text-resources/text-resources.schema.v1.json",
+  "language": "nb",
+  "resources": [
+    {
+      "id": "appName",
+      "value": "MSIS-melding om smittsom sykdom"
+    },
+    {
+      "id": "heading.pasient",
+      "value": "Personopplysninger"
+    },
+    {
+      "id": "paragraph.pasient-ingress",
+      "value": "Opplysningene er hentet fra journalen der det var mulig. Kontroller dem, og fyll ut resten."
+    },
+    {
+      "id": "field.Pasient_Etternavn",
+      "value": "Etternavn"
+    },
+    {
+      "id": "field.Pasient_Fornavn",
+      "value": "Fornavn"
+    },
+    {
+      "id": "field.Pasient_Fnr",
+      "value": "Fødselsnummer"
+    },
+    {
+      "id": "field.Pasient_Dnr",
+      "value": "D-nummer/DUF-nr."
+    },
+    {
+      "id": "field.Pasient_Kjonn",
+      "value": "Kjønn"
+    },
+    {
+      "id": "field.Pasient_Telefon",
+      "value": "Pasientens telefonnummer"
+    },
+    {
+      "id": "field.Pasient_Fastlege",
+      "value": "Pasientens fastlege"
+    },
+    {
+      "id": "field.Pasient_Bokommune",
+      "value": "Bokommune/bydel"
+    },
+    {
+      "id": "field.Pasient_Fodeland",
+      "value": "Fødeland"
+    },
+    {
+      "id": "field.Pasient_MorsFodeland",
+      "value": "Mors fødeland"
+    },
+    {
+      "id": "field.Pasient_FarsFodeland",
+      "value": "Fars fødeland"
+    },
+    {
+      "id": "heading.utenlandsfodte",
+      "value": "For utenlandsfødte"
+    },
+    {
+      "id": "field.Pasient_BotidINorge",
+      "value": "Botid i Norge"
+    },
+    {
+      "id": "field.Pasient_AarsakOpphold",
+      "value": "Årsak til opphold i Norge"
+    },
+    {
+      "id": "heading.relevant",
+      "value": "Hvis relevant"
+    },
+    {
+      "id": "field.Pasient_YrkeInstitusjon",
+      "value": "Yrke, ev. navn på barnehage, helseinstitusjon eller skole"
+    },
+    {
+      "id": "nav.next",
+      "value": "Neste"
+    },
+    {
+      "id": "nav.back",
+      "value": "Forrige"
+    },
+    {
+      "id": "heading.sykdom",
+      "value": "Sykdom"
+    },
+    {
+      "id": "field.Epj_DiagnoseKode",
+      "value": "Diagnose i journalen (ICD-10)"
+    },
+    {
+      "id": "field.Epj_DiagnoseTekst",
+      "value": "Diagnosetekst i journalen"
+    },
+    {
+      "id": "field.Sykdom",
+      "value": "Hvilken meldingspliktig sykdom?"
+    },
+    {
+      "id": "field.Sykdom.description",
+      "value": "Foreslått fra ICD-10-diagnosen i journalen når den peker på en meldingspliktig sykdom."
+    },
+    {
+      "id": "field.Sykdom_Innlagt",
+      "value": "Innlagt helseinstitusjon?"
+    },
+    {
+      "id": "field.Sykdom_InnlagtType",
+      "value": "Hvor er pasienten innlagt?"
+    },
+    {
+      "id": "field.Sykdom_InnlagtDato",
+      "value": "Dato for innleggelse"
+    },
+    {
+      "id": "field.Sykdom_Institusjon",
+      "value": "Navn på helseinstitusjon"
+    },
+    {
+      "id": "field.Sykdom_Baerertilstand",
+      "value": "Bærertilstand?"
+    },
+    {
+      "id": "field.Sykdom_Innsykningsdato",
+      "value": "Innsykningsdato"
+    },
+    {
+      "id": "field.Sykdom_Provetakingsdato",
+      "value": "Prøvetakingsdato"
+    },
+    {
+      "id": "field.Sykdom_AntattSmittetidspunkt",
+      "value": "Antatt smittetidspunkt"
+    },
+    {
+      "id": "field.Sykdom_Laboratorium",
+      "value": "Laboratorium"
+    },
+    {
+      "id": "field.Sykdom_Indikasjon",
+      "value": "Indikasjon for laboratorieundersøkelse"
+    },
+    {
+      "id": "field.Sykdom_IndikasjonAnnet",
+      "value": "Annen indikasjon"
+    },
+    {
+      "id": "field.Sykdom_Sykdomsbilde",
+      "value": "Sykdomsbilde relatert til meldepliktig sykdom"
+    },
+    {
+      "id": "field.Sykdom_KliniskSepsis",
+      "value": "Klinisk sepsis?"
+    },
+    {
+      "id": "field.Sykdom_Utfall",
+      "value": "Utfall av sykdom"
+    },
+    {
+      "id": "field.Sykdom_Dodsdato",
+      "value": "Dødsdato"
+    },
+    {
+      "id": "field.Sykdom_Folgetilstand",
+      "value": "Ev. følgetilstand"
+    },
+    {
+      "id": "field.Sykdom_FolgetilstandDato",
+      "value": "Dato for følgetilstand"
+    },
+    {
+      "id": "heading.smitte",
+      "value": "Smitte"
+    },
+    {
+      "id": "field.Smitte_Mate",
+      "value": "Antatt smittemåte"
+    },
+    {
+      "id": "field.Smitte_Beskrivelse",
+      "value": "Beskrivelse av smittesituasjon"
+    },
+    {
+      "id": "field.Smitte_Sted",
+      "value": "Antatt smittested"
+    },
+    {
+      "id": "field.Smitte_Kommune",
+      "value": "Kommune"
+    },
+    {
+      "id": "field.Smitte_Land",
+      "value": "Land"
+    },
+    {
+      "id": "field.Smitte_Hjemkomstdato",
+      "value": "Dato for hjemkomst"
+    },
+    {
+      "id": "field.Smitte_UtenlandsAarsak",
+      "value": "Årsak til utenlandsopphold"
+    },
+    {
+      "id": "field.Smitte_Vaksinert",
+      "value": "Var pasienten vaksinert mot sykdommen, eller brukte malariaprofylakse?"
+    },
+    {
+      "id": "heading.covid",
+      "value": "Ved covid-19"
+    },
+    {
+      "id": "field.Covid_Naerkontakt",
+      "value": "Bekreftet nærkontakt?"
+    },
+    {
+      "id": "field.Covid_Eksponeringssted",
+      "value": "Sannsynlig sted for eksponering/smitte"
+    },
+    {
+      "id": "field.Smitte_UnderliggendeSykdom",
+      "value": "Underliggende sykdom"
+    },
+    {
+      "id": "heading.hiv",
+      "value": "Ved hiv"
+    },
+    {
+      "id": "field.Hiv_MeldtTidligere",
+      "value": "Meldt tidligere?"
+    },
+    {
+      "id": "field.Hiv_Cd4",
+      "value": "CD4"
+    },
+    {
+      "id": "field.Hiv_TidligerePositivProve",
+      "value": "Tid og sted for tidligere positiv prøve"
+    },
+    {
+      "id": "field.Hiv_SisteNegativProve",
+      "value": "Dato for siste negative prøve"
+    },
+    {
+      "id": "heading.syfilis",
+      "value": "Ved syfilis"
+    },
+    {
+      "id": "field.Syfilis_Stadium",
+      "value": "Stadium av sykdommen"
+    },
+    {
+      "id": "field.Smitte_Veiledning",
+      "value": "Har pasienten fått personlig smittevernveiledning?"
+    },
+    {
+      "id": "field.Smitte_Tiltak",
+      "value": "Hvilke smitteverntiltak er igangsatt? Andre utfyllende opplysninger"
+    },
+    {
+      "id": "heading.melder",
+      "value": "Melder"
+    },
+    {
+      "id": "paragraph.melder-ingress",
+      "value": "Lege og legekontor er hentet fra journalen."
+    },
+    {
+      "id": "field.Melder_Navn",
+      "value": "Melders navn"
+    },
+    {
+      "id": "field.Melder_Hpr",
+      "value": "HPR-nummer"
+    },
+    {
+      "id": "field.Melder_Virksomhet",
+      "value": "Legekontor"
+    },
+    {
+      "id": "field.Melder_Orgnr",
+      "value": "Organisasjonsnummer"
+    },
+    {
+      "id": "field.Melder_Adresse",
+      "value": "Adresse"
+    },
+    {
+      "id": "field.Melder_Telefon",
+      "value": "Telefonnummer"
+    },
+    {
+      "id": "field.Melder_Epost",
+      "value": "E-postadresse"
+    },
+    {
+      "id": "paragraph.melder-mottak",
+      "value": "Meldingen sendes til MSIS ved Folkehelseinstituttet. En kopi lagres i pasientens journal."
+    },
+    {
+      "id": "button.submit",
+      "value": "Send inn MSIS-melding"
+    },
+    {
+      "id": "Pasient",
+      "value": "Pasient"
+    },
+    {
+      "id": "Sykdom",
+      "value": "Sykdom"
+    },
+    {
+      "id": "Smitte",
+      "value": "Smitte"
+    },
+    {
+      "id": "Melder",
+      "value": "Melder"
+    }
+  ]
+}

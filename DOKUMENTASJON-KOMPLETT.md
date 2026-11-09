@@ -12,21 +12,22 @@
 3. [Kravspesifikasjon v0.6](#3-kravspesifikasjon-v06)
 4. [Implementeringsdetaljer](#4-implementeringsdetaljer)
 5. [Skjemastruktur IS-2569](#5-skjemastruktur-is-2569)
-6. [Skjemastruktur - henvisning til kjeveortopedisk vurdering](#6-skjemastruktur---henvisning-til-kjeveortopedisk-vurdering)
-7. [SmartFhir.Common - delt SMART on FHIR-bibliotek](#7-smartfhircommon---delt-smart-on-fhir-bibliotek)
-8. [Pasientflyt](#8-pasientflyt)
-9. [Åpne beslutninger](#9-åpne-beslutninger)
-10. [Risikoregister](#10-risikoregister)
-11. [Veikart](#11-veikart)
-12. [Sammenligning: forer vs. syk-inn vs. NHN Førerrett-App](#12-sammenligning-forer-vs-syk-inn-vs-nhn-førerrett-app)
-13. [NHN-dokumentasjon](#13-nhn-dokumentasjon)
-14. [Kartlegging av rapporteringsplikter](#14-kartlegging-av-rapporteringsplikter)
-15. [Strategi](#15-strategi)
-16. [Norwegian FHIR Hackathon 2026 - forberedelse](#16-norwegian-fhir-hackathon-2026---forberedelse)
-17. [Testguide: SMART EHR Launch mot launch.smarthealthit.org](#17-testguide-smart-ehr-launch-mot-launchsmarthealthitorg)
-18. [Kjør appen lokalt med nav-epj](#18-kjør-appen-lokalt-med-nav-epj)
-19. [nav-epj som lokalt SMART on FHIR-testmiljo](#19-nav-epj-som-lokalt-smart-on-fhir-testmiljo)
-20. [Epic on FHIR som testmiljo (Helseplattformen)](#20-epic-on-fhir-som-testmiljo-helseplattformen)
+6. [Skjemastruktur - MSIS-melding om smittsom sykdom](#6-skjemastruktur---msis-melding-om-smittsom-sykdom)
+7. [Skjemastruktur - henvisning til kjeveortopedisk vurdering](#7-skjemastruktur---henvisning-til-kjeveortopedisk-vurdering)
+8. [SmartFhir.Common - delt SMART on FHIR-bibliotek](#8-smartfhircommon---delt-smart-on-fhir-bibliotek)
+9. [Pasientflyt](#9-pasientflyt)
+10. [Åpne beslutninger](#10-åpne-beslutninger)
+11. [Risikoregister](#11-risikoregister)
+12. [Veikart](#12-veikart)
+13. [Sammenligning: forer vs. syk-inn vs. NHN Førerrett-App](#13-sammenligning-forer-vs-syk-inn-vs-nhn-førerrett-app)
+14. [NHN-dokumentasjon](#14-nhn-dokumentasjon)
+15. [Kartlegging av rapporteringsplikter](#15-kartlegging-av-rapporteringsplikter)
+16. [Strategi](#16-strategi)
+17. [Norwegian FHIR Hackathon 2026 - forberedelse](#17-norwegian-fhir-hackathon-2026---forberedelse)
+18. [Testguide: SMART EHR Launch mot launch.smarthealthit.org](#18-testguide-smart-ehr-launch-mot-launchsmarthealthitorg)
+19. [Kjør appen lokalt med nav-epj](#19-kjør-appen-lokalt-med-nav-epj)
+20. [nav-epj som lokalt SMART on FHIR-testmiljo](#20-nav-epj-som-lokalt-smart-on-fhir-testmiljo)
+21. [Epic on FHIR som testmiljo (Helseplattformen)](#21-epic-on-fhir-som-testmiljo-helseplattformen)
 
 ---
 
@@ -2542,7 +2543,74 @@ Total estimert utvidelse: fra 18 til ~70 felt i datamodellen.
 
 ---
 
-# 6. Skjemastruktur - henvisning til kjeveortopedisk vurdering
+# 6. Skjemastruktur - MSIS-melding om smittsom sykdom
+
+# MSIS-melding om smittsom sykdom — skjemastruktur og forhåndsutfylling
+
+## Nominativ melding om smittsom sykdom (FHI, fastsatt september 2020)
+
+**Kilde:** [MSIS-meldeskjema, nominativ melding om smittsom sykdom (PDF)](https://www.fhi.no/globalassets/dokumenterfiler/skjema/msis/msis-meldeskjema_nominativ-melding-om-smittsom-sykdom.pdf)
+**Hjemmel:** MSIS-forskriften, med hjemmel i helseregisterloven og smittevernloven.
+**Formål:** Legen melder sykdommer i gruppe A til MSIS ved Folkehelseinstituttet samme dag som sykdommen er oppdaget eller mistenkt. Papirskjemaet sier også at en kopi skal lagres i pasientens journal. Tuberkulose meldes på egne skjemaer og er ikke med.
+
+**Lagt til 2026-11-09** som tredje skjema i prosjektet, bygd på `forer-legeerklaering` (Altinn app v9). Appen ligger i `src/msis-melding/App`, med `src/msis-melding` som approt, slik `studioctl` forventer.
+
+---
+
+## Slik er skjemaet bygd opp
+
+Papirskjemaet har to kolonner på én side. Appen deler det i fire sider:
+
+| Side | Innhold | Fra journalen |
+|---|---|---|
+| Pasient | Personopplysninger, fødeland, botid og yrke/institusjon | Navn, fødselsnummer eller D-nummer, kjønn |
+| Sykdom | Meldingspliktig sykdom, innleggelse, datoer, laboratorium, indikasjon, sykdomsbilde og utfall | ICD-10-diagnosen, og et forslag til sykdom |
+| Smitte | Smittemåte, smittested, utenlandsopphold, vaksinasjon, og egne seksjoner for covid-19, hiv og syfilis | – |
+| Melder | Lege, legekontor og kontaktopplysninger | Legens navn og HPR-nummer, legekontorets navn og organisasjonsnummer |
+
+Alle feltene i datamodellen `MsisMeldingModel` er tekst. Datoer lagres som ÅÅÅÅ-MM-DD, og flervalg som kommaseparerte koder.
+
+**Felt som bare vises når de er aktuelle:**
+
+- Hvor pasienten er innlagt, dato og institusjon vises når «Innlagt helseinstitusjon?» er «Ja».
+- Dødsdato vises når utfallet er «Død».
+- Kommune vises ved smitte i Norge. Land, hjemkomstdato og årsak til utenlandsopphold vises ved smitte i utlandet.
+- Seksjonen for covid-19 vises for «Koronavirus med utbruddspotensial», seksjonen for hiv for hiv-infeksjon, aids og dobbelinfeksjon med tuberkulose, og seksjonen for syfilis for syfilis.
+
+## Forhåndsutfylling
+
+`MsisPrefillService` bruker samme SMART-launch og FHIR-henting som førerrett-appen (`SmartFhir.Common`).
+
+| Felt i meldingen | FHIR-kilde | Kan legen endre det? |
+|---|---|---|
+| Etternavn, fornavn | `Patient.name` | Nei |
+| Fødselsnummer | `Patient.identifier`, OID `2.16.578.1.12.4.1.4.1` | Nei |
+| D-nummer | `Patient.identifier`, OID `2.16.578.1.12.4.1.4.2` | Nei |
+| Kjønn | `Patient.gender` | Ja, fylles bare når feltet er tomt |
+| Diagnose i journalen | Første `Condition` på konsultasjonen kodet i ICD-10, OID `2.16.578.1.12.4.1.1.7110` | Nei |
+| Meldingspliktig sykdom | Foreslått fra ICD-10-koden | Ja, fylles bare når feltet er tomt |
+| Melders navn og HPR-nummer | `Practitioner`, fra `fhirUser` i id_token | Nei |
+| Legekontor og organisasjonsnummer | `PractitionerRole` → `Organization` | Nei |
+
+**Forslaget til sykdom** kommer fra ICD-10-kodene i `MsisSykdommer`, for eksempel A37 for kikhoste og B05 for meslinger. Den lengste koden som passer, vinner, så A01.0 gir tyfoidfeber og A01.1 paratyfoidfeber. Kodene er et utvalg for PoC-en, ikke en offisiell kodeliste fra FHI. Sykdommer som også skal varsles muntlig, er merket «(skal også varsles)» i listen.
+
+**Diagnoser i nav-epj:** de innebygde konsultasjonene har én ICPC-2-hoveddiagnose og ingen ICD-10-kode. For å teste forslaget må konsultasjonen få en ICD-10-diagnose, se scenarioene i [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md).
+
+## Kopi i journalen
+
+Papirskjemaet skal lagres i pasientens journal. Etter innsending skriver `EpjWritebackServiceTask` PDF-en tilbake til EPJ-et som et journalnotat på konsultasjonen, på samme måte som førerrett-appen. Notatet sier hvilken sykdom som er meldt, referansen i Altinn, innsykningsdato og smitteverntiltak.
+
+## Det som ikke er gjort
+
+- Meldingen sendes ikke videre til MSIS, og kopien til kommuneoverlegen sendes ikke. Altinn-instansen er mottaket i PoC-en.
+- Kommunelegen varsles ikke for sykdommene som skal varsles. Listen merker dem bare.
+- Pasientens telefonnummer, fastlege og bokommune hentes ikke fra journalen. nav-epj har ikke disse opplysningene i FHIR.
+- Bare bokmål.
+
+
+---
+
+# 7. Skjemastruktur - henvisning til kjeveortopedisk vurdering
 
 # Henvisning til kjeveortopedisk vurdering — Skjemastruktur og feltanalyse
 
@@ -2877,7 +2945,7 @@ Fortsatt ubekreftet/manuelt:
 
 ---
 
-# 7. SmartFhir.Common - delt SMART on FHIR-bibliotek
+# 8. SmartFhir.Common - delt SMART on FHIR-bibliotek
 
 # SmartFhir.Common — delt SMART on FHIR-launch/-prefill for flere Altinn-apper i dette repoet
 
@@ -2925,7 +2993,7 @@ Den opprinnelige `SmartLaunchController.cs` og `FhirPrefillService.cs` i `src/Ap
 
 ---
 
-# 8. Pasientflyt
+# 9. Pasientflyt
 
 # Pasientflyt: Egenerklæring og legeattestprosessen — førerrett
 
@@ -3254,7 +3322,7 @@ Pasient (fnr 01039012345)
 
 ---
 
-# 9. Åpne beslutninger
+# 10. Åpne beslutninger
 
 # Åpne beslutninger og uavklarte designvalg
 
@@ -3496,7 +3564,7 @@ Forsikringsbransjen er en stor og manuell konsument av legeerklæringer (ved teg
 
 ---
 
-# 10. Risikoregister
+# 11. Risikoregister
 
 # Risikoregister — `forer-legeerklaering`
 
@@ -3538,7 +3606,7 @@ Se også [BESLUTNINGER.md](BESLUTNINGER.md) for beslutningsdetaljer og [VEIKART.
 
 ---
 
-# 11. Veikart
+# 12. Veikart
 
 # Veikart — `forer-legeerklaering` og SMART on FHIR på Altinn
 
@@ -3723,7 +3791,7 @@ Nasjonal fase 4: SMART som standard integrasjonsmønster i Altinn
 
 ---
 
-# 12. Sammenligning: forer vs. syk-inn vs. NHN Førerrett-App
+# 13. Sammenligning: forer vs. syk-inn vs. NHN Førerrett-App
 
 # Sammenligning: `forer-legeerklaering` vs. `syk-inn` vs. NHN Førerrett-App
 
@@ -3907,7 +3975,7 @@ Uavhengig av plattformvalg gjelder veikartets fase 1–3 (tokenvalidering, refre
 
 ---
 
-# 13. NHN-dokumentasjon
+# 14. NHN-dokumentasjon
 
 # NHN-dokumentasjon — SMART App Launch + Førerrett-App
 
@@ -4144,7 +4212,7 @@ Ingen av disse er kodeendringer i seg selv — de er forankrings-/kommunikasjons
 
 ---
 
-# 14. Kartlegging av rapporteringsplikter
+# 15. Kartlegging av rapporteringsplikter
 
 # Kartlegging av rapporteringsplikter for helsepersonell
 
@@ -4528,7 +4596,7 @@ Se [BESLUTNINGER.md](BESLUTNINGER.md) C-7 for strategisk avklaring.
 
 ---
 
-# 15. Strategi
+# 16. Strategi
 
 # Strategi — SMART on FHIR for Altinn Studio
 
@@ -4733,7 +4801,7 @@ Se [BESLUTNINGER.md](BESLUTNINGER.md) for alle åpne beslutninger. De mest strat
 
 ---
 
-# 16. Norwegian FHIR Hackathon 2026 - forberedelse
+# 17. Norwegian FHIR Hackathon 2026 - forberedelse
 
 # Norwegian FHIR Hackathon 2026 (EHiN pre-konferanse) — forberedelse og gap-analyse
 
@@ -4862,7 +4930,7 @@ Sporet lenker til to NAV-repoer (samme team som `syk-inn`, jf. [SAMMENLIGNING-sy
 
 ---
 
-# 17. Testguide: SMART EHR Launch mot launch.smarthealthit.org
+# 18. Testguide: SMART EHR Launch mot launch.smarthealthit.org
 
 # Testguide: SMART EHR Launch mot launch.smarthealthit.org
 
@@ -5053,7 +5121,7 @@ Det denne testrunden **ikke** beviser:
 
 ---
 
-# 18. Kjør appen lokalt med nav-epj
+# 19. Kjør appen lokalt med nav-epj
 
 # Kjør appen lokalt med nav-epj
 
@@ -5144,6 +5212,18 @@ studioctl run
 
 Hemmeligheten må være den samme som `clientSecret` i klientregistreringen fra steg 2.
 
+**MSIS-meldingen** er en egen app i `src/msis-melding`. Den kan kjøre samtidig med legeerklæringen:
+
+```bash
+cd src/msis-melding
+(cd App && dotnet user-secrets set "SmartOnFhir:ClientSecret" "local-dev-secret")   # én gang
+studioctl run
+```
+
+Kjør `studioctl` fra `src/msis-melding`, ikke fra `src/msis-melding/App`. `studioctl` leter etter en mappe som heter `App`, og fra feil mappe finner den `src/App` i stedet.
+
+Begge appene logger inn som testlegen Gul Barnestol. Når alle appene som kjører, har egne testdata, bruker localtest bare dem og ikke de innebygde testbrukerne.
+
 ## 5. Åpne appen fra nav-epj
 
 1. Gå til `http://localhost:5173`.
@@ -5187,6 +5267,26 @@ Invoke-RestMethod -Method Post "$B/api/patients/$P/consultations" | Out-Null
 | 6 | Skrive tilbake til journalen | Gå tilbake til journalen til pasienten i nav-epj etter scenario 5. | Under journalnotatet står «Dokumenter fra apper» med «Legeerklæring førerrett.pdf» og et kort notat med referanse og vurdering. Lenken åpner den samme PDF-en som i Altinn. Legens eget journalnotat er uendret. |
 | 7 | Journalnotatet etter skriving tilbake | Endre legens journalnotat etter scenario 6 og trykk «Lagre». | Legens notat lagres. Dokumentet fra appen er uendret. |
 
+### MSIS-meldingen
+
+De innebygde konsultasjonene i nav-epj har bare ICPC-2-diagnoser. Gi først konsultasjonen en ICD-10-diagnose, for eksempel A37.0 kikhoste, i journalen i nav-epj. Uten frontend:
+
+```bash
+B=http://localhost:8080
+P=$(curl -s $B/api/patient | jq -r '.[] | select(.givenName=="TRYGG") | .id')
+curl -s -X PUT $B/api/active-patient -H 'Content-Type: application/json' -d "{\"patientId\":\"$P\"}"
+C=$(curl -s -X POST $B/api/patients/$P/consultations | jq -r .id)
+curl -s -X PATCH $B/api/patients/$P/consultations -H 'Content-Type: application/json' \
+  -d "{\"consultationId\":\"$C\",\"diagnoses\":[{\"code\":\"A37.0\",\"system\":\"ICD10\"}],\"clinicalNote\":\"Kikhoste.\",\"finalize\":false}"
+```
+
+| # | Scenario | Slik gjør du det | Forventet resultat |
+|---|---|---|---|
+| M1 | Forhåndsutfylling | Åpne «MSIS-melding» fra nav-epj for TRYGG FJORD. | Navn og fødselsnummer er fylt ut, og kjønn er «Mann». På siden «Sykdom» står A37.0 som diagnose i journalen, og «Kikhoste» er valgt som meldingspliktig sykdom. På siden «Melder» står GRØNN VITS og Fjordvik Legekontor. |
+| M2 | Felt som vises etter svar | Svar «Ja» på «Innlagt helseinstitusjon?», og velg «Utlandet» som smittested. | Hvor pasienten er innlagt, dato og institusjon vises. Land, hjemkomstdato og årsak til utenlandsopphold vises. Seksjonene for covid-19, hiv og syfilis er skjult for kikhoste. |
+| M3 | Seksjon for én sykdom | Velg «Hiv-infeksjon» som sykdom og gå til siden «Smitte». | Seksjonen «Ved hiv» vises. |
+| M4 | Sende inn og lagre i journalen | Fyll inn telefonnummer på siden «Melder» og trykk «Send inn MSIS-melding». | Kvitteringen vises. I journalen i nav-epj står «MSIS-melding om smittsom sykdom.pdf» under «Dokumenter fra apper», med et notat om sykdommen og referansen. |
+
 ## Når noe går galt
 
 | Symptom | Årsak |
@@ -5195,6 +5295,8 @@ Invoke-RestMethod -Method Post "$B/api/patients/$P/consultations" | Out-Null
 | nav-epj sin frontend viser «Du er logget inn med HelseID, men nav-epj svarte ikke» | Frontenden når ikke backend. Åpne `http://localhost:8080/api/practitioners/me`. Den skal vise legen GRØNN VITS. Får du ikke svar, er backend ikke startet: se etter feil i terminalen der `gradlew runLocal` kjører. Får du en annen side, bruker noe annet port 8080, typisk HAPI FHIR-containeren fra repoets gamle oppsett. Stopp den og start backend på nytt. |
 | Backend svarer på `localhost:8080`, men frontenden viser fortsatt feilen | Se i terminalen der `yarn dev` kjører. Står det `ECONNREFUSED ::1:8080`, slår `localhost` opp til IPv6. Endre alle tre `target`-verdiene i `frontend/vite.config.js` i nav-epj fra `http://localhost:8080` til `http://127.0.0.1:8080`, og start `yarn dev` på nytt. |
 | Appen står ikke i applistene i nav-epj | Du kjører NAVs nav-epj, ikke grenen fra steg 2. |
+| nav-epj starter ikke og sier «Migration checksum mismatch for migration version 8» | Databasen er fra en eldre versjon av grenen, der vedlegg-migreringen hadde nummer 8. Testdataene legges inn på nytt ved hver oppstart, så slett databasen med `docker compose down -v` og `docker compose up -d` i nav-epj, og start backend igjen. |
+| Innsendingen henger på «Vent litt», og appens logg har 404 fra `register/api/v1/parties/lookup` | localtest bruker bare appenes testdata, og de mangler en organisasjon PDF-en trenger. Appenes `wwwroot/testData.json` skal inneholde Digitaliseringsdirektoratet (991825827). |
 | Innsendingen stopper med «Noe gikk galt» etter kvitteringssiden har begynt å laste | Skrivingen tilbake til EPJ-et feilet. Se etter «EPJ write-back» i appens logg med `studioctl app logs`. «Token request failed» betyr at nav-epj ikke fikk hentet appens nøkkel fra `/smart/jwks.json`: sjekk at appen kjører. |
 | Lege og legekontor er tomme, men pasienten er fylt ut | Appen fikk ikke validert id_token. Se etter «id_token» i appens logg med `studioctl app logs`. |
 | `/smart/test-writeback` gir HTTP 400 | nav-epj godtar bare sitt eget notatformat for DocumentReference. Testen er skrevet for Epic. |
@@ -5202,7 +5304,7 @@ Invoke-RestMethod -Method Post "$B/api/patients/$P/consultations" | Out-Null
 
 ---
 
-# 19. nav-epj som lokalt SMART on FHIR-testmiljo
+# 20. nav-epj som lokalt SMART on FHIR-testmiljo
 
 # nav-epj som lokalt SMART on FHIR-testmiljø
 
@@ -5427,7 +5529,7 @@ Dette er den enkleste måten å demonstrere at hele flyten fungerer for en perso
 
 ---
 
-# 20. Epic on FHIR som testmiljo (Helseplattformen)
+# 21. Epic on FHIR som testmiljo (Helseplattformen)
 
 # Epic on FHIR som testmiljø — relevant fordi Helseplattformen kjører Epic
 
