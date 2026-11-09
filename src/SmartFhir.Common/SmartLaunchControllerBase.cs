@@ -179,7 +179,7 @@ namespace SmartFhir.Common
                 _config["SmartOnFhir:ClientId"] ?? _config.GetSection("SmartOnFhir")["ClientId"] ?? DefaultClientId;
             var org = RouteData.Values["org"]?.ToString();
             var app = RouteData.Values["app"]?.ToString();
-            var redirectUri = $"{Request.Scheme}://{Request.Host}/{org}/{app}/smart/callback";
+            var redirectUri = BuildRedirectUri(org, app);
 
             var scopes = string.Join(" ", GetScopes());
 
@@ -455,7 +455,7 @@ namespace SmartFhir.Common
 
             var org = RouteData.Values["org"]?.ToString();
             var app = RouteData.Values["app"]?.ToString();
-            var redirectUri = $"{Request.Scheme}://{Request.Host}/{org}/{app}/smart/callback";
+            var redirectUri = BuildRedirectUri(org, app);
             var clientId = _config["SmartOnFhir:ClientId"];
             var clientSecret = _config["SmartOnFhir:ClientSecret"];
             var privateKeyPath = _config["SmartOnFhir:ClientAssertionPrivateKeyPath"];
@@ -536,6 +536,26 @@ namespace SmartFhir.Common
             }
 
             return Redirect($"/{org}/{app}");
+        }
+
+        /// <summary>
+        /// redirect_uri slik EPJ-en har registrert den. I TT02 og produksjon terminerer ingressen TLS,
+        /// så appen ser selv http og ville sendt en http-adresse som EPJ-en avviser. Adressen bygges
+        /// derfor fra GeneralSettings:ExternalAppBaseUrl, som Altinn-plattformen og studioctl setter til
+        /// appens offentlige adresse, med de samme plassholderne som Altinn.App.Core bruker. Uten
+        /// innstillingen, for eksempel med dotnet run, brukes forespørselens egen adresse.
+        /// </summary>
+        private string BuildRedirectUri(string org, string app)
+        {
+            var externalAppBaseUrl = _config["GeneralSettings:ExternalAppBaseUrl"];
+            if (string.IsNullOrEmpty(externalAppBaseUrl))
+                return $"{Request.Scheme}://{Request.Host}/{org}/{app}/smart/callback";
+
+            var baseUrl = externalAppBaseUrl
+                .Replace("{hostName}", _config["GeneralSettings:HostName"], StringComparison.OrdinalIgnoreCase)
+                .Replace("{org}", org, StringComparison.OrdinalIgnoreCase)
+                .Replace("{app}", app, StringComparison.OrdinalIgnoreCase);
+            return $"{baseUrl.TrimEnd('/')}/smart/callback";
         }
 
         /// <summary>
