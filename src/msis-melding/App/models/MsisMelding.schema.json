@@ -1,0 +1,191 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://altinn.no/MsisMelding",
+  "title": "MsisMelding",
+  "type": "object",
+  "properties": {
+    "Pasient_Etternavn": {
+      "type": "string"
+    },
+    "Pasient_Fornavn": {
+      "type": "string"
+    },
+    "Pasient_Fnr": {
+      "type": "string"
+    },
+    "Pasient_Dnr": {
+      "type": "string"
+    },
+    "Pasient_Kjonn": {
+      "type": "string"
+    },
+    "Pasient_Telefon": {
+      "type": "string"
+    },
+    "Pasient_Fastlege": {
+      "type": "string"
+    },
+    "Pasient_Bokommune": {
+      "type": "string"
+    },
+    "Pasient_Fodeland": {
+      "type": "string"
+    },
+    "Pasient_MorsFodeland": {
+      "type": "string"
+    },
+    "Pasient_FarsFodeland": {
+      "type": "string"
+    },
+    "Pasient_BotidINorge": {
+      "type": "string"
+    },
+    "Pasient_AarsakOpphold": {
+      "type": "string"
+    },
+    "Pasient_YrkeInstitusjon": {
+      "type": "string"
+    },
+    "Epj_DiagnoseKode": {
+      "type": "string"
+    },
+    "Epj_DiagnoseTekst": {
+      "type": "string"
+    },
+    "Sykdom": {
+      "type": "string"
+    },
+    "Sykdom_Innlagt": {
+      "type": "string"
+    },
+    "Sykdom_InnlagtType": {
+      "type": "string"
+    },
+    "Sykdom_InnlagtDato": {
+      "type": "string"
+    },
+    "Sykdom_Institusjon": {
+      "type": "string"
+    },
+    "Sykdom_Baerertilstand": {
+      "type": "string"
+    },
+    "Sykdom_Innsykningsdato": {
+      "type": "string"
+    },
+    "Sykdom_Provetakingsdato": {
+      "type": "string"
+    },
+    "Sykdom_AntattSmittetidspunkt": {
+      "type": "string"
+    },
+    "Sykdom_Laboratorium": {
+      "type": "string"
+    },
+    "Sykdom_Indikasjon": {
+      "type": "string"
+    },
+    "Sykdom_IndikasjonAnnet": {
+      "type": "string"
+    },
+    "Sykdom_Sykdomsbilde": {
+      "type": "string"
+    },
+    "Sykdom_KliniskSepsis": {
+      "type": "string"
+    },
+    "Sykdom_Utfall": {
+      "type": "string"
+    },
+    "Sykdom_Dodsdato": {
+      "type": "string"
+    },
+    "Sykdom_Folgetilstand": {
+      "type": "string"
+    },
+    "Sykdom_FolgetilstandDato": {
+      "type": "string"
+    },
+    "Smitte_Mate": {
+      "type": "string"
+    },
+    "Smitte_Beskrivelse": {
+      "type": "string"
+    },
+    "Smitte_Sted": {
+      "type": "string"
+    },
+    "Smitte_Kommune": {
+      "type": "string"
+    },
+    "Smitte_Land": {
+      "type": "string"
+    },
+    "Smitte_Hjemkomstdato": {
+      "type": "string"
+    },
+    "Smitte_UtenlandsAarsak": {
+      "type": "string"
+    },
+    "Smitte_Vaksinert": {
+      "type": "string"
+    },
+    "Covid_Naerkontakt": {
+      "type": "string"
+    },
+    "Covid_Eksponeringssted": {
+      "type": "string"
+    },
+    "Smitte_UnderliggendeSykdom": {
+      "type": "string"
+    },
+    "Hiv_MeldtTidligere": {
+      "type": "string"
+    },
+    "Hiv_Cd4": {
+      "type": "string"
+    },
+    "Hiv_TidligerePositivProve": {
+      "type": "string"
+    },
+    "Hiv_SisteNegativProve": {
+      "type": "string"
+    },
+    "Syfilis_Stadium": {
+      "type": "string"
+    },
+    "Smitte_Veiledning": {
+      "type": "string"
+    },
+    "Smitte_Tiltak": {
+      "type": "string"
+    },
+    "Melder_Navn": {
+      "type": "string"
+    },
+    "Melder_Hpr": {
+      "type": "string"
+    },
+    "Melder_Virksomhet": {
+      "type": "string"
+    },
+    "Melder_Orgnr": {
+      "type": "string"
+    },
+    "Melder_Adresse": {
+      "type": "string"
+    },
+    "Melder_Telefon": {
+      "type": "string"
+    },
+    "Melder_Epost": {
+      "type": "string"
+    },
+    "Epj_KonsultasjonDato": {
+      "type": "string"
+    },
+    "Pasient_Fodselsdato": {
+      "type": "string"
+    }
+  }
+}

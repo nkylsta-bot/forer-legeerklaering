@@ -1,0 +1,18 @@
+[
+  {
+    "value": "frisk",
+    "label": "Frisk"
+  },
+  {
+    "value": "fortsatt-syk",
+    "label": "Fortsatt syk"
+  },
+  {
+    "value": "ukjent",
+    "label": "Ukjent"
+  },
+  {
+    "value": "dod",
+    "label": "Død"
+  }
+]

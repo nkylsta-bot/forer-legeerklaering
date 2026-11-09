@@ -1,0 +1,450 @@
+{
+  "$schema": "https://altinn.studio/designer/app-dist/9.0.0-preview.10/schemas/json/layout/layout.schema.v1.json",
+  "data": {
+    "layout": [
+      {
+        "id": "heading-smitte",
+        "type": "Heading",
+        "size": "L",
+        "textResourceBindings": {
+          "title": "heading.smitte"
+        }
+      },
+      {
+        "id": "smitte-mate",
+        "type": "Checkboxes",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Mate"
+        },
+        "optionsId": "smittemater",
+        "textResourceBindings": {
+          "title": "field.Smitte_Mate"
+        }
+      },
+      {
+        "id": "smitte-beskrivelse",
+        "type": "TextArea",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Beskrivelse"
+        },
+        "textResourceBindings": {
+          "title": "field.Smitte_Beskrivelse"
+        }
+      },
+      {
+        "id": "smitte-sted",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Sted"
+        },
+        "optionsId": "smittested",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Smitte_Sted"
+        }
+      },
+      {
+        "id": "smitte-kommune",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Kommune"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Smitte_Sted"
+          ],
+          "norge"
+        ],
+        "textResourceBindings": {
+          "title": "field.Smitte_Kommune"
+        }
+      },
+      {
+        "id": "smitte-land",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Land"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Smitte_Sted"
+          ],
+          "utlandet"
+        ],
+        "textResourceBindings": {
+          "title": "field.Smitte_Land"
+        }
+      },
+      {
+        "id": "smitte-hjemkomstdato",
+        "type": "Datepicker",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Hjemkomstdato"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Smitte_Sted"
+          ],
+          "utlandet"
+        ],
+        "textResourceBindings": {
+          "title": "field.Smitte_Hjemkomstdato"
+        },
+        "timeStamp": false
+      },
+      {
+        "id": "smitte-utenlandsaarsak",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_UtenlandsAarsak"
+        },
+        "optionsId": "utenlandsaarsak",
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Smitte_Sted"
+          ],
+          "utlandet"
+        ],
+        "textResourceBindings": {
+          "title": "field.Smitte_UtenlandsAarsak"
+        }
+      },
+      {
+        "id": "smitte-vaksinert",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Vaksinert"
+        },
+        "optionsId": "jaNeiUkjent",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Smitte_Vaksinert"
+        }
+      },
+      {
+        "id": "heading-covid",
+        "type": "Heading",
+        "size": "M",
+        "textResourceBindings": {
+          "title": "heading.covid"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom"
+          ],
+          "koronavirus"
+        ]
+      },
+      {
+        "id": "covid-naerkontakt",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Covid_Naerkontakt"
+        },
+        "optionsId": "jaNeiUkjent",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Covid_Naerkontakt"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom"
+          ],
+          "koronavirus"
+        ]
+      },
+      {
+        "id": "covid-eksponeringssted",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Covid_Eksponeringssted"
+        },
+        "optionsId": "eksponeringssted",
+        "textResourceBindings": {
+          "title": "field.Covid_Eksponeringssted"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom"
+          ],
+          "koronavirus"
+        ]
+      },
+      {
+        "id": "smitte-underliggendesykdom",
+        "type": "TextArea",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_UnderliggendeSykdom"
+        },
+        "textResourceBindings": {
+          "title": "field.Smitte_UnderliggendeSykdom"
+        }
+      },
+      {
+        "id": "heading-hiv",
+        "type": "Heading",
+        "size": "M",
+        "textResourceBindings": {
+          "title": "heading.hiv"
+        },
+        "hidden": [
+          "and",
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "hiv-infeksjon"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "aids"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "tuberkulose-hiv"
+          ]
+        ]
+      },
+      {
+        "id": "hiv-meldttidligere",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Hiv_MeldtTidligere"
+        },
+        "optionsId": "jaNeiUkjent",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Hiv_MeldtTidligere"
+        },
+        "hidden": [
+          "and",
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "hiv-infeksjon"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "aids"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "tuberkulose-hiv"
+          ]
+        ]
+      },
+      {
+        "id": "hiv-cd4",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Hiv_Cd4"
+        },
+        "textResourceBindings": {
+          "title": "field.Hiv_Cd4"
+        },
+        "hidden": [
+          "and",
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "hiv-infeksjon"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "aids"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "tuberkulose-hiv"
+          ]
+        ]
+      },
+      {
+        "id": "hiv-tidligerepositivprove",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Hiv_TidligerePositivProve"
+        },
+        "textResourceBindings": {
+          "title": "field.Hiv_TidligerePositivProve"
+        },
+        "hidden": [
+          "and",
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "hiv-infeksjon"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "aids"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "tuberkulose-hiv"
+          ]
+        ]
+      },
+      {
+        "id": "hiv-sistenegativprove",
+        "type": "Datepicker",
+        "dataModelBindings": {
+          "simpleBinding": "Hiv_SisteNegativProve"
+        },
+        "textResourceBindings": {
+          "title": "field.Hiv_SisteNegativProve"
+        },
+        "timeStamp": false,
+        "hidden": [
+          "and",
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "hiv-infeksjon"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "aids"
+          ],
+          [
+            "notEquals",
+            [
+              "dataModel",
+              "Sykdom"
+            ],
+            "tuberkulose-hiv"
+          ]
+        ]
+      },
+      {
+        "id": "heading-syfilis",
+        "type": "Heading",
+        "size": "M",
+        "textResourceBindings": {
+          "title": "heading.syfilis"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom"
+          ],
+          "syfilis"
+        ]
+      },
+      {
+        "id": "syfilis-stadium",
+        "type": "Input",
+        "dataModelBindings": {
+          "simpleBinding": "Syfilis_Stadium"
+        },
+        "textResourceBindings": {
+          "title": "field.Syfilis_Stadium"
+        },
+        "hidden": [
+          "notEquals",
+          [
+            "dataModel",
+            "Sykdom"
+          ],
+          "syfilis"
+        ]
+      },
+      {
+        "id": "smitte-veiledning",
+        "type": "RadioButtons",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Veiledning"
+        },
+        "optionsId": "jaNeiUkjent",
+        "layout": "row",
+        "textResourceBindings": {
+          "title": "field.Smitte_Veiledning"
+        }
+      },
+      {
+        "id": "smitte-tiltak",
+        "type": "TextArea",
+        "dataModelBindings": {
+          "simpleBinding": "Smitte_Tiltak"
+        },
+        "textResourceBindings": {
+          "title": "field.Smitte_Tiltak"
+        }
+      },
+      {
+        "id": "nav-smitte",
+        "type": "NavigationButtons",
+        "showBackButton": true,
+        "textResourceBindings": {
+          "next": "nav.next",
+          "back": "nav.back"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "value": "symptomer",
+    "label": "Symptomer/tegn"
+  },
+  {
+    "value": "rutine",
+    "label": "Rutine/screening"
+  },
+  {
+    "value": "smitteoppsporing",
+    "label": "Smitteoppsporing"
+  },
+  {
+    "value": "innvandrer",
+    "label": "Helseundersøkelse av innvandrer"
+  },
+  {
+    "value": "gravid",
+    "label": "Helseundersøkelse av gravid"
+  },
+  {
+    "value": "eget-onske",
+    "label": "Pasientens eget ønske"
+  },
+  {
+    "value": "helsevesen-utland",
+    "label": "Kontakt med helsevesen i utlandet"
+  },
+  {
+    "value": "annet",
+    "label": "Annet"
+  }
+]

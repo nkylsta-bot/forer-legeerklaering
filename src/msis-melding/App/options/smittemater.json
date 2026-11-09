@@ -1,0 +1,62 @@
+[
+  {
+    "value": "luft",
+    "label": "Luft/dråpesmitte"
+  },
+  {
+    "value": "mat",
+    "label": "Matbåren"
+  },
+  {
+    "value": "vann",
+    "label": "Vannbåren"
+  },
+  {
+    "value": "fekal-oral",
+    "label": "Fekal-oral"
+  },
+  {
+    "value": "kontakt",
+    "label": "Kontaktsmitte"
+  },
+  {
+    "value": "sex-hetero",
+    "label": "Sex, hetero"
+  },
+  {
+    "value": "sex-homo",
+    "label": "Sex, homo"
+  },
+  {
+    "value": "sex-ikke-angitt",
+    "label": "Sex, ikke angitt"
+  },
+  {
+    "value": "sproyter",
+    "label": "Sprøyter/brukerutstyr"
+  },
+  {
+    "value": "medisinsk-utstyr",
+    "label": "Via medisinsk utstyr"
+  },
+  {
+    "value": "insekt-dyr",
+    "label": "Insekt/dyr"
+  },
+  {
+    "value": "stikkskade",
+    "label": "Stikkskade/annen blodkontakt"
+  },
+  {
+    "value": "mor-til-barn",
+    "label": "Mor til barn"
+  },
+  {
+    "value": "blod",
+    "label": "Blod/blodprodukter"
+  },
+  {
+    "value": "annet",
+    "label": "Annet/ukjent"
+  }
+]

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://altinn.studio/designer/app-dist/9.0.0-preview.10/schemas/json/application/application-metadata.schema.v1.json",
+  "id": "digdir/msis-melding",
+  "org": "digdir",
+  "title": {
+    "nb": "MSIS-melding om smittsom sykdom",
+    "nn": "MSIS-melding om smittsam sjukdom",
+    "en": "MSIS notification of communicable disease"
+  },
+  "dataTypes": [
+    {
+      "id": "ref-data-as-pdf",
+      "allowedContentTypes": [
+        "application/pdf"
+      ],
+      "maxCount": 0,
+      "minCount": 0,
+      "enableFileScan": false,
+      "validationErrorOnPendingFileScan": false,
+      "enabledFileAnalysers": [],
+      "enabledFileValidators": []
+    },
+    {
+      "id": "MsisMelding",
+      "allowedContentTypes": [
+        "application/xml"
+      ],
+      "appLogic": {
+        "autoCreate": true,
+        "classRef": "Altinn.App.Models.MsisMeldingModel",
+        "allowAnonymousOnStateless": false,
+        "autoDeleteOnProcessEnd": false
+      },
+      "taskIds": [
+        "Task_1"
+      ],
+      "maxCount": 1,
+      "minCount": 1,
+      "enableFileScan": false,
+      "validationErrorOnPendingFileScan": false,
+      "enabledFileAnalysers": [],
+      "enabledFileValidators": []
+    },
+    {
+      "id": "signatur",
+      "allowedContentTypes": [
+        "application/json"
+      ],
+      "taskIds": [
+        "Task_1"
+      ],
+      "maxCount": 1,
+      "minCount": 0,
+      "allowedContributors": [
+        "app:owned"
+      ],
+      "enableFileScan": false,
+      "validationErrorOnPendingFileScan": false,
+      "enabledFileAnalysers": [],
+      "enabledFileValidators": []
+    }
+  ],
+  "partyTypesAllowed": {
+    "bankruptcyEstate": false,
+    "organisation": false,
+    "person": true,
+    "subUnit": false
+  },
+  "autoDeleteOnProcessEnd": false
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "value": "mann",
+    "label": "Mann"
+  },
+  {
+    "value": "kvinne",
+    "label": "Kvinne"
+  },
+  {
+    "value": "ukjent",
+    "label": "Ukjent"
+  }
+]
