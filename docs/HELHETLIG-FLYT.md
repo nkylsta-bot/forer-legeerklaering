@@ -81,7 +81,7 @@ Pasient (Helsenorge.no)      EPJ (fastlege)         Altinn Studio-app (BFF)     
 | 3 | Altinn henter FHIR-data fra EPJ | ✅ Verifisert mot lokal HAPI FHIR-mock, og 2026-11-08 mot nav-epj med norske OID-er for fødselsnummer, HPR-nummer og organisasjonsnummer. Ikke mot et reelt fastlege-EPJ | [FhirPrefillService.cs](../src/App/services/FhirPrefillService.cs), [RISIKOREGISTER.md R1](RISIKOREGISTER.md) |
 | 3b | Altinn henter pasientens egenerklæring (QuestionnaireResponse) | ❌ Ikke implementert — avhenger av steg 1 | [PASIENTFLYT.md §3](PASIENTFLYT.md) |
 | 4 | Lege fyller ut, signerer, sender inn | ✅ Verifisert («Signer og send inn», Task_1) | [process.bpmn](../src/App/config/process/process.bpmn) |
-| 5a | Full attest skrives tilbake til EPJ | ⚠️ Skrivemekanikk bevist 2026-08-11 (`POST DocumentReference` → `HTTP 201` mot launch.smarthealthit.org), men placeholder-innhold, ikke PDF/idempotens. Mot nav-epj gir testen `HTTP 400`, fordi nav-epj bare godtar sitt eget notatformat | [VEIKART.md fase 2](VEIKART.md), [IMPLEMENTERING.md §13](IMPLEMENTERING.md) |
+| 5a | Full attest skrives tilbake til EPJ | ✅ **Verifisert mot nav-epj 2026-11-09.** Etter innsending skriver en egen service task PDF-en tilbake som et journalnotat på konsultasjonen, med et systemtoken fra SMART Backend Services. Krever vår fork av nav-epj, som tar imot PDF-er. Gjenstår: en ny innsending etter en vellykket skriving kan gi et dokument til | [LOKALT-MED-NAV-EPJ.md](LOKALT-MED-NAV-EPJ.md), [EpjWritebackServiceTask.cs](../src/App/services/EpjWritebackServiceTask.cs) |
 | 5b | Konklusjon (grønt/rødt) → SVV via Altinn Events | ⚠️ Datamodell verifisert (`ForerKonklusjonModel`), selve Events-abonnementet hos SVV er ikke avtalt | [BESLUTNINGER.md C-3](BESLUTNINGER.md) |
 | — | Helsenorge EksternAPI (Oppgave/Skjema) | ✅ **Ende-til-ende verifisert 2026-09-18/21** for `Communication`- og `Questionnaire`-oppgave, samt kopi-tilbake til innbygger (`DocumentReference`, eget API). Gjenstår: `Bundle`-varianten, HTTPS-nåbart skjema (localtest er ren HTTP), og sømløst OIDC-uthopp | [IMPLEMENTERING.md §14.1](IMPLEMENTERING.md), [RISIKOREGISTER.md R9](RISIKOREGISTER.md), [PASIENTFLYT.md](PASIENTFLYT.md) |
 
@@ -123,7 +123,9 @@ Endringene ligger i `SmartFhir.Common` og gjelder begge appene.
 
 - nav-epj godtar http-adresser for klienter bare på `localhost` og `127.0.0.1`. Localtest finner appen bare på `local.altinn.cloud`, så nav-epj må endres lokalt på én linje. Et forslag til NAV er å godta adresser som peker til loopback.
 - nav-epj sitt `state`-problem bør meldes til NAV, selv om appen nå tåler det.
-- `/smart/test-writeback` er skrevet for Epic og gir `HTTP 400` mot nav-epj.
+- `/smart/test-writeback` er skrevet for Epic og gir `HTTP 400` mot nav-epj. Den automatiske skrivingen etter innsending bruker nav-epj sitt format.
+- nav-epj tok ikke imot PDF-er, lot ikke systemtokens opprette journalnotater, og kunne overskrive et dokument fra en app når legen lagret journalnotatet. Alt er rettet i grenen `forer-legeerklaering` i [nkylsta-bot/nav-epj](https://github.com/nkylsta-bot/nav-epj/tree/forer-legeerklaering), men ikke sendt til NAV.
+- Oppgraderingen til Altinn app v9 ga komponent-ID-er med understrek, som v9-frontenden avviser. Rettet.
 - Skjemaet merker diagnosekoden som ICD-10, men nav-epj sender ICPC-2-koder, for eksempel T86.
 - nav-epj sin frontend henter NAVs designsystem fra GitHub Packages og krever et GitHub-token med `read:packages`.
 
@@ -137,6 +139,8 @@ Endringene ligger i `SmartFhir.Common` og gjelder begge appene.
 | 4 | Sette `SmartOnFhir:AllowedIssuerList` til `https://epj.ekstern.dev.nav.no/fhir` i TT02-innstillingene, og lese klienthemmelighet eller privatnøkkel fra Azure Key Vault | Utenfor Development avvises alle launcher når listen er tom. Privatnøkkelen leses i dag fra en filsti |
 | 5 | Be NAV registrere klienten med TT02-adressene på `digdir.apps.tt02.altinn.no`, launch-modus `tab` og samme scopes som lokalt | Klienter registreres manuelt av NAV. `tab` trengs fordi informasjonskapsler og Altinn-innloggingen ikke virker i nav-epj sin iframe |
 | 6 | Bekrefte at TT02-appen når `epj.ekstern.dev.nav.no` | Token-utvekslingen og FHIR-kallene går fra appens server. Ikke verifisert |
+| 7 | Legge appens Backend Services-nøkkel i Azure Key Vault som `SmartOnFhir:Backend:PrivateKeyJwk`, og registrere systemklienten med `jwksUri` på TT02-adressen | Skrivingen tilbake bruker en egen systemklient. Lokalt lages nøkkelen automatisk |
+| 8 | Få NAV til å ta inn endringene fra vår fork av nav-epj, eller kjøre forken selv | Den driftede nav-epj tar ikke imot PDF-er, og lar ikke systemtokens opprette journalnotater |
 
 Et mellomsteg før TT02: be NAV om også å registrere en `local.altinn.cloud`-adresse. Redirecten skjer i nettleseren, så den lokale appen kan da bruke den driftede nav-epj, med ekte HelseID-innlogging og NAVs testdata.
 

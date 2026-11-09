@@ -79,7 +79,7 @@
               <tr><td>Altinn-sesjon for legen</td><td><span class="pill warn">Mitigert i dev</span></td><td>Auto-innlogging via localtests testbruker i <code>/smart/callback</code> finnes ikke i produksjon (R10)</td></tr>
               <tr><td>Altinn henter FHIR-data</td><td><span class="pill ok">Verifisert</span></td><td>Mot lokal HAPI FHIR-mock, testserveren og fra 2026-11-08 nav-epj med norske OID-er — ikke mot et reelt fastlege-EPJ (R1)</td></tr>
               <tr><td>Legen fyller ut, signerer og sender inn</td><td><span class="pill ok">Verifisert</span></td><td>«Signer og send inn», <code>Task_1</code></td></tr>
-              <tr><td>Full attest skrives tilbake til EPJ</td><td><span class="pill warn">Mekanikk bevist</span></td><td><code>POST DocumentReference</code> ga 201 mot launch.smarthealthit.org, men med plassholder-innhold; ikke PDF, ikke idempotent. Mot nav-epj gir testen 400, fordi nav-epj bare godtar sitt eget notatformat</td></tr>
+              <tr><td>Full attest skrives tilbake til EPJ</td><td><span class="pill ok">Verifisert mot nav-epj</span></td><td>2026-11-09: PDF-en skrives tilbake som journalnotat etter innsending, med et systemtoken fra SMART Backend Services. Krever vår fork av nav-epj</td></tr>
               <tr><td>Konklusjon til Statens vegvesen</td><td><span class="pill warn">Modell verifisert</span></td><td>Datamodell finnes; Events-abonnementet hos SVV er ikke avtalt</td></tr>
               <tr><td>Helsenorge EksternAPI (oppgave, skjemaoppgave, kopi)</td><td><span class="pill ok">Verifisert</span></td><td>Fire flyter mot TEST02. Se <a href="../helsenorge/">Helsenorge</a></td></tr>
               <tr><td>Epic on FHIR-sandkassen som testmiljø</td><td><span class="pill bad">Blokkert</span></td><td>Se <a href="#avhengigheter">eksterne avhengigheter</a></td></tr>
@@ -107,6 +107,8 @@
           <li>Issuer-allowlist for den driftede nav-epj, og hemmeligheter fra Azure Key Vault.</li>
           <li>NAV må registrere klienten med TT02-adressene og launch-modus <code>tab</code>.</li>
           <li>Bekrefte at TT02-appen når <code>epj.ekstern.dev.nav.no</code>.</li>
+          <li>Appens nøkkel for skriving tilbake i Azure Key Vault, og systemklienten registrert hos NAV.</li>
+          <li>NAV må ta inn endringene fra vår fork av nav-epj for at den driftede instansen skal ta imot PDF-er.</li>
         </ol>
         <p class="footnote" style="margin-top:var(--ds-size-3);">Detaljer og funn: <a class="ds-link" href="https://github.com/FinnurO/forer-legeerklaering/blob/main/docs/HELHETLIG-FLYT.md#nav-epj-og-veien-mot-tt02-2026-11-08" target="_blank" rel="noopener"><code>docs/HELHETLIG-FLYT.md</code></a>.</p>
       </section>

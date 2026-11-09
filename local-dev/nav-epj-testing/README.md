@@ -1,9 +1,10 @@
 # nav-epj-testing
 
-Klientregistreringen appen trenger for å kunne startes fra [`navikt/nav-epj`](https://github.com/navikt/nav-epj) lokalt.
+Klientregistreringene appen trenger i [`navikt/nav-epj`](https://github.com/navikt/nav-epj):
 
-- `forer-legeerklaering-client.yaml` — limes inn i `smart.clients` i nav-epj sin `src/main/resources/application-local.yaml`.
+- `forer-legeerklaering-poc` for launch fra EPJ-et.
+- `forer-legeerklaering-backend` for å skrive PDF-en tilbake til journalen etter innsending (SMART Backend Services).
+
+Begge er allerede lagt inn i grenen [`forer-legeerklaering`](https://github.com/nkylsta-bot/nav-epj/tree/forer-legeerklaering) i vår fork av nav-epj. Filen her viser hva som er registrert.
 
 Hele oppsettet og testscenarioene står i [docs/LOKALT-MED-NAV-EPJ.md](../../docs/LOKALT-MED-NAV-EPJ.md).
-
-Patchen og seed-skriptet som lå her før, er fjernet. De var skrevet mot nav-epj slik den var i august 2026, og gjelder ikke lenger.

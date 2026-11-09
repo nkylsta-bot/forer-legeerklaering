@@ -1,5 +1,5 @@
-    # Lim inn denne blokken nederst i smart.clients i nav-epj sin
-    # src/main/resources/application-local.yaml, rett over linjen "valkey:".
+    # Klientregistreringene i smart.clients i nav-epj sin src/main/resources/application-local.yaml.
+    # De er allerede lagt inn i grenen forer-legeerklaering i nkylsta-bot/nav-epj.
     # Se docs/LOKALT-MED-NAV-EPJ.md.
     - clientId: "forer-legeerklaering-poc"
       name: "Legeerklæring førerrett"
