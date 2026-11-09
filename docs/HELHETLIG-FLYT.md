@@ -117,7 +117,7 @@ Endringene ligger i `SmartFhir.Common` og gjelder begge appene.
 | Bytte til TRYGG FJORD | ✅ Nytt skjema med riktig pasient |
 | Gjenbrukt launch-lenke | ✅ Avvist med «Authorization error: invalid_request» |
 | Feil klienthemmelighet | ✅ «Token exchange failed» |
-| Innsending | ❓ Ikke verifisert. PDF-genereringen feilet på testmaskinen på grunn av maskinens TLS-proxy, ikke på grunn av endringene |
+| Innsending | ✅ PDF og kvittering 2026-11-09. Krevde at PDF-containeren på testmaskinen stolte på maskinens TLS-proxy, ingen endring i appen |
 
 ### Funn
 
