@@ -12,7 +12,7 @@
         }
       },
       {
-        "id": "Pasient_Fnr",
+        "id": "pasient-fnr",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Pasient_Fnr"
@@ -23,7 +23,7 @@
         }
       },
       {
-        "id": "Pasient_Fornavn",
+        "id": "pasient-fornavn",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Pasient_Fornavn"
@@ -34,7 +34,7 @@
         }
       },
       {
-        "id": "Pasient_Etternavn",
+        "id": "pasient-etternavn",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Pasient_Etternavn"
@@ -45,7 +45,7 @@
         }
       },
       {
-        "id": "Pasient_Fodselsdato",
+        "id": "pasient-fodselsdato",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Pasient_Fodselsdato"
@@ -56,7 +56,7 @@
         }
       },
       {
-        "id": "Pasient_Kjonn",
+        "id": "pasient-kjonn",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Pasient_Kjonn"
@@ -75,7 +75,7 @@
         }
       },
       {
-        "id": "Lege_Fornavn",
+        "id": "lege-fornavn",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Lege_Fornavn"
@@ -86,7 +86,7 @@
         }
       },
       {
-        "id": "Lege_Etternavn",
+        "id": "lege-etternavn",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Lege_Etternavn"
@@ -97,7 +97,7 @@
         }
       },
       {
-        "id": "Lege_HPR",
+        "id": "lege-hpr",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Lege_HPR"
@@ -116,7 +116,7 @@
         }
       },
       {
-        "id": "Virksomhet_Navn",
+        "id": "virksomhet-navn",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Virksomhet_Navn"
@@ -127,7 +127,7 @@
         }
       },
       {
-        "id": "Virksomhet_Orgnr",
+        "id": "virksomhet-orgnr",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Virksomhet_Orgnr"
@@ -146,7 +146,7 @@
         }
       },
       {
-        "id": "Konsultasjon_Dato",
+        "id": "konsultasjon-dato",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Konsultasjon_Dato"
@@ -157,7 +157,7 @@
         }
       },
       {
-        "id": "Diagnose_Kode",
+        "id": "diagnose-kode",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Diagnose_Kode"
@@ -168,7 +168,7 @@
         }
       },
       {
-        "id": "Diagnose_Tekst",
+        "id": "diagnose-tekst",
         "type": "Input",
         "dataModelBindings": {
           "simpleBinding": "Diagnose_Tekst"
@@ -187,7 +187,7 @@
         }
       },
       {
-        "id": "Forer_Kjoretoygruppe",
+        "id": "forer-kjoretoygruppe",
         "type": "Dropdown",
         "dataModelBindings": {
           "simpleBinding": "Forer_Kjoretoygruppe"
@@ -199,7 +199,7 @@
         }
       },
       {
-        "id": "Forer_ErSkikket",
+        "id": "forer-er-skikket",
         "type": "RadioButtons",
         "dataModelBindings": {
           "simpleBinding": "Forer_ErSkikket"
@@ -220,7 +220,7 @@
         }
       },
       {
-        "id": "Forer_Vilkar",
+        "id": "forer-vilkar",
         "type": "TextArea",
         "dataModelBindings": {
           "simpleBinding": "Forer_Vilkar"
@@ -231,7 +231,7 @@
         }
       },
       {
-        "id": "Forer_Merknad",
+        "id": "forer-merknad",
         "type": "TextArea",
         "dataModelBindings": {
           "simpleBinding": "Forer_Merknad"
