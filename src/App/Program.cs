@@ -39,6 +39,11 @@ ConfigureServices(builder.Services, builder.Configuration);
 
 ConfigureWebHostBuilder(builder.WebHost);
 
+if (!builder.Environment.IsDevelopment())
+{
+    builder.AddAzureKeyVaultAsConfigProvider();
+}
+
 WebApplication app = builder.Build();
 
 Configure();
